@@ -185,6 +185,54 @@ table.rp.list td { font-size: 15px; }
 table.rp.list td .n, table.rp.list th .n { color: var(--muted); font-size: 12px; margin-left: 8px; font-weight: 400; }
 @media (max-width: 1160px) { .reports { grid-template-columns: minmax(0, 1fr); } .reptitle .rngnum { font-size: 32px; } }
 
+/* ---------- график во времени ---------- */
+/* цвета рядов: 6 категориальных (проверены валидатором в обеих темах) + нейтральные для «Всего» и «Остальные» */
+.chartbox { margin-top: 34px; --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300;
+  --s-other: #898781; --s-total: var(--text); --ch-grid: #e1e0d9; --ch-axis: #c3c2b7; --ch-muted: #898781; --ch-text2: #52514e; }
+:root[data-theme="dark"] .chartbox { --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300;
+  --ch-grid: #2c2c2a; --ch-axis: #383835; --ch-muted: #898781; --ch-text2: #c3c2b7; }
+.chart-ctl { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 16px; padding: 12px 14px 0; }
+.chartbox .cf { display: flex; flex-direction: column; gap: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); font-weight: 600; }
+.chartbox .cf select { padding: 5px 8px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); min-height: 32px;
+  font-size: 14px; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--text); }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 12px 14px 0; }
+.chart-legend .lg { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 10px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
+.chart-legend .lg:hover { background: var(--head-bg); }
+.chart-legend .lg[aria-pressed="false"] { opacity: .45; }
+.chart-legend .lg[aria-pressed="false"] .nm { text-decoration: line-through; }
+.chartbox .key { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--c); border-radius: 1px; flex: none; }
+.chart-legend .lgv { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.chart-plot { position: relative; padding: 6px 14px 4px; min-height: 120px; outline-offset: -2px; }
+.chart-plot:focus-visible { outline: 2px solid var(--accent); }
+.chsvg { display: block; touch-action: pan-y; overflow: visible; max-width: 100%; height: auto; }
+.chsvg .g { stroke: var(--ch-grid); stroke-width: 1; }
+.chsvg .ax { stroke: var(--ch-axis); stroke-width: 1; }
+.chsvg .yl, .chsvg .xl { fill: var(--ch-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.chsvg .ln { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chsvg .ed, .chsvg .hd { stroke: var(--surface); stroke-width: 2; }   /* кольцо цвета фона: точка читается там, где пересекает линию */
+.chsvg .cx { stroke: var(--ch-axis); stroke-width: 1; }
+.chsvg .dl { fill: var(--ch-text2); font-size: 11px; }
+.chsvg .lk { stroke-width: 2; stroke-linecap: round; }
+.chtip { position: absolute; z-index: 6; pointer-events: none; min-width: 170px; padding: 8px 10px; border-radius: 8px; background: var(--surface);
+  border: 1px solid var(--border-strong); box-shadow: 0 6px 20px rgb(16 24 40 / .18); font-size: 12.5px; }
+.chtip .tt-h { color: var(--ch-text2); margin-bottom: 4px; }
+.chtip .tt-r { display: flex; align-items: center; gap: 8px; padding: 1px 0; }
+.chtip .tt-r b { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; min-width: 84px; text-align: right; }
+.chtip .tt-r .tn { color: var(--ch-text2); }
+.chart-table { max-height: 380px; overflow: auto; padding: 8px 14px 4px; }
+table.chtable { border-collapse: collapse; width: 100%; }
+.chtable th, .chtable td { padding: 5px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; text-align: left; }
+.chtable th.r, .chtable td.r { text-align: right; font-variant-numeric: tabular-nums; }
+.chtable thead th { position: sticky; top: 0; background: var(--head-bg); font-size: 12px; }
+.chtable tfoot td { position: sticky; bottom: 0; background: var(--total-bg); font-weight: 700; }
+.chart-foot { padding: 2px 14px 12px; color: var(--muted); font-size: 12px; min-height: 8px; }
+.chart-plot .none, .chart-table .none { color: var(--muted); padding: 30px 0; text-align: center; }
+/* без цвета (печать, режим высокой контрастности) линии различаются штрихом */
+@media print, (forced-colors: active) {
+  .chsvg .s2 { stroke-dasharray: 7 3; } .chsvg .s3 { stroke-dasharray: 2 3; } .chsvg .s4 { stroke-dasharray: 9 3 2 3; }
+  .chsvg .s5 { stroke-dasharray: 1 4; } .chsvg .s6 { stroke-dasharray: 12 4; }
+}
+
 /* ---------- KPI ---------- */
 .lnk { color: var(--accent); cursor: pointer; text-decoration: underline dotted; text-underline-offset: 2px; }
 .lnk:hover { text-decoration: underline; }
@@ -282,7 +330,7 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
 
 @media print {
   body { background: #fff; color: #000; font-size: 10pt; }
-  .top, .panel, .notes .warns, .btn, footer, .toast, .reptitle .check { display: none !important; }
+  .top, .panel, .notes .warns, .btn, footer, .toast, .reptitle .check, .chart-ctl { display: none !important; }
   main { padding: 0; max-width: none; }
   .scroll { max-height: none; overflow: visible; }
   .tablebox, .kpi { box-shadow: none; }
@@ -428,6 +476,30 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
         <div class="card" id="designers"></div>
         <div class="card" id="sums"></div>
       </div>
+    </div>
+
+    <!-- динамика: бюджет и квадратура во времени, разрезы выбираются здесь же -->
+    <div class="tablebox chartbox" id="chartBox">
+      <div class="tbl-head">
+        <h2 id="chTitle"></h2>
+        <span class="sub" id="chSub"></span>
+        <span class="grow"></span>
+      </div>
+      <div class="chart-ctl">
+        <label class="cf"><span>Показатель</span>
+          <select id="chMetric"><option value="budget">Бюджет, ₽</option><option value="area">Квадратура, м²</option></select></label>
+        <label class="cf"><span>Разрез</span><select id="chSplit"></select></label>
+        <label class="cf"><span>Шаг</span>
+          <select id="chStep"><option value="auto">Авто</option><option value="day">День</option><option value="week">Неделя</option><option value="month">Месяц</option></select></label>
+        <label class="check"><input type="checkbox" id="chCum"> Нарастающим итогом</label>
+        <div class="seg" id="chView" role="group" aria-label="Вид диаграммы">
+          <button data-v="chart" aria-pressed="true">График</button><button data-v="table" aria-pressed="false">Таблица</button>
+        </div>
+      </div>
+      <div class="chart-legend" id="chLegend"></div>
+      <div class="chart-plot" id="chPlot"></div>
+      <div class="chart-table" id="chTable" hidden></div>
+      <div class="chart-foot" id="chFoot"></div>
     </div>
 
     <div class="kpis" id="kpis"></div>
@@ -1102,6 +1174,115 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     };
   }
 
+  // ---------------------------------------------------------------- динамика во времени (для графика)
+
+  const DAY_MS = 86400000;
+  const MONTHS_FULL = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+  const msOf = d => Date.UTC(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8, 10));
+  const isoMs = ms => { const d = new Date(ms); return iso(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate()); };
+  const weekStartMs = ms => ms - ((new Date(ms).getUTCDay() + 6) % 7) * DAY_MS;      // понедельник
+  const dm = d => `${d.slice(8, 10)}.${d.slice(5, 7)}`;
+
+  // Что откладываем по вертикали и как делим на линии.
+  const CHART_METRICS = {
+    budget: { label: 'Бюджет', unit: '₽', get: d => d.budget },
+    area:   { label: 'Квадратура', unit: 'м²', get: d => d.area },
+  };
+  const CHART_SPLITS = {
+    total:   { label: 'Общий', key: null },                     // одна линия по всем сделкам
+    manager: { label: 'По менеджерам', key: d => d.tookBy },    // «Взял в работу»
+    printer: { label: 'По печатникам', key: d => d.printer },
+  };
+
+  function bucketList(step, minMs, maxMs) {
+    const out = [];
+    if (step === 'day') {
+      for (let t = minMs; t <= maxMs; t += DAY_MS) { const k = isoMs(t); out.push({ key: k, from: k, to: k, label: dm(k), title: fmtDay(k) }); }
+    } else if (step === 'week') {
+      for (let t = weekStartMs(minMs); t <= maxMs; t += 7 * DAY_MS) {
+        const a = isoMs(t), b = isoMs(t + 6 * DAY_MS);
+        out.push({ key: a, from: a, to: b, label: dm(a), title: `неделя ${dm(a)} – ${fmtDay(b)}` });
+      }
+    } else {
+      const e = new Date(maxMs);
+      let y = new Date(minMs).getUTCFullYear(), m = new Date(minMs).getUTCMonth();
+      while (y < e.getUTCFullYear() || (y === e.getUTCFullYear() && m <= e.getUTCMonth())) {
+        out.push({ key: `${y}-${pad(m + 1)}`, from: iso(y, m + 1, 1), to: isoMs(Date.UTC(y, m + 1, 0)), label: `${MONTHS[m]} ${String(y).slice(2)}`, title: `${MONTHS_FULL[m]} ${y}` });
+        if (++m > 11) { m = 0; y++; }
+      }
+    }
+    return out;
+  }
+  const bucketKeyOf = (step, day) => (step === 'day' ? day : step === 'week' ? isoMs(weekStartMs(msOf(day))) : day.slice(0, 7));
+
+  /** Имена в порядке убывания суммы - по ним закрепляются цвета линий (цвет принадлежит имени, а не месту в рейтинге). */
+  function rankNames(deals, metric, split) {
+    const m = CHART_METRICS[metric] || CHART_METRICS.budget, keyFn = (CHART_SPLITS[split] || {}).key;
+    if (!keyFn) return [];
+    const t = new Map();
+    deals.forEach(d => { const n = keyFn(d); if (n) t.set(n, (t.get(n) || 0) + (m.get(d) || 0)); });
+    return [...t.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ru')).map(e => e[0]);
+  }
+
+  /**
+   * Ряды для графика. deals - уже отфильтрованные сделки.
+   * opts: { metric:'budget'|'area', split:'total'|'manager'|'printer', step:'auto'|'day'|'week'|'month', dateField,
+   *         cumulative, order:[имена по приоритету], maxSeries:6 }
+   * Первая линия всегда «Всего» (все сделки), дальше - по имени; имена сверх maxSeries сворачиваются в «Остальные».
+   * Линия, где везде 0, не создаётся. Сделки без даты в график не попадают (noDate).
+   */
+  function timeSeries(deals, opts) {
+    opts = opts || {};
+    const metricKey = CHART_METRICS[opts.metric] ? opts.metric : 'budget', metric = CHART_METRICS[metricKey];
+    const split = CHART_SPLITS[opts.split] ? opts.split : 'total';
+    const df = opts.dateField || 'produced', maxSeries = opts.maxSeries || 6;
+    const dated = [];
+    let noDate = 0;
+    for (const d of deals) {
+      const day = d[df] || d.produced || d.created;
+      if (!day) noDate++; else dated.push({ d, day });
+    }
+    const base = { metric: metricKey, unit: metric.unit, split, noDate, cumulative: !!opts.cumulative, empty: true, step: null, buckets: [], series: [] };
+    if (!dated.length) return base;
+
+    let lo = Infinity, hi = -Infinity;
+    dated.forEach(x => { const t = msOf(x.day); if (t < lo) lo = t; if (t > hi) hi = t; });
+    const spanDays = Math.round((hi - lo) / DAY_MS) + 1;
+    const step = opts.step && opts.step !== 'auto' ? opts.step : (spanDays <= 62 ? 'day' : spanDays <= 550 ? 'week' : 'month');
+    const buckets = bucketList(step, lo, hi);
+    const at = new Map(buckets.map((b, i) => [b.key, i]));
+    const zeros = () => new Array(buckets.length).fill(0);
+    const total = zeros(), by = new Map(), keyFn = CHART_SPLITS[split].key;
+    for (const { d, day } of dated) {
+      const i = at.get(bucketKeyOf(step, day)), v = metric.get(d) || 0;
+      total[i] += v;
+      if (keyFn) {
+        const name = keyFn(d);
+        if (name) { if (!by.has(name)) by.set(name, zeros()); by.get(name)[i] += v; }   // сделки без менеджера/печатника - только в «Всего»
+      }
+    }
+    const sum = a => a.reduce((t, v) => t + v, 0);
+    const finish = a => {
+      let r = a.map(round2);
+      if (opts.cumulative) { let c = 0; r = r.map(v => (c = round2(c + v))); }
+      return r;
+    };
+    const order = opts.order || [];
+    const rank = n => { const i = order.indexOf(n); return i < 0 ? 1e9 : i; };
+    const names = [...by.keys()].filter(n => round2(sum(by.get(n))) !== 0)
+      .sort((a, b) => rank(a) - rank(b) || sum(by.get(b)) - sum(by.get(a)) || a.localeCompare(b, 'ru'));
+    const series = [{ id: '__total', name: 'Всего', kind: 'total', slot: -1, sum: round2(sum(total)), values: finish(total) }];
+    const rest = zeros();
+    let folded = false;
+    names.forEach((n, k) => {
+      const slot = order.length ? order.indexOf(n) : k;
+      if (slot >= 0 && slot < maxSeries) series.push({ id: n, name: n, kind: 'name', slot, sum: round2(sum(by.get(n))), values: finish(by.get(n)) });
+      else { by.get(n).forEach((v, i) => { rest[i] += v; }); folded = true; }
+    });
+    if (folded) series.push({ id: '__other', name: 'Остальные', kind: 'other', slot: -1, sum: round2(sum(rest)), values: finish(rest) });
+    return { ...base, empty: false, step, spanDays, buckets, series };
+  }
+
   const distinct = (recs, key) => [...new Set(recs.map(r => r[key]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ru'));
 
   return {
@@ -1110,8 +1291,222 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     surfaceFromField, parseRequestCell,
     parseExport, mergeSnapshots, filterItems, pivot, universe, accValue, round2, fmtWidth, fmtDay,
     printerReport, designerReport, budgetReport, cleanRequests, isDone, isZeroSum, distinct, yearOf, years,
+    timeSeries, rankNames, CHART_METRICS, CHART_SPLITS,
   };
 });
+
+</script>
+<script>
+'use strict';
+/*
+ * Линейный график во времени на чистом SVG (без библиотек, работает офлайн).
+ * Данные приходят готовыми из Core.timeSeries. Цвета - переменные CSS (--s1..--s6, --s-total, --s-other),
+ * поэтому светлая и тёмная темы переключаются без перерисовки.
+ *
+ * Что в нём есть (по правилам построения диаграмм): легенда (она же переключатель линий), подписи у концов линий
+ * (только если линий не больше 4 и они не сталкиваются), вертикальная линия под курсором с одной подсказкой на все ряды,
+ * управление с клавиатуры, вид «Таблица» с теми же числами.
+ */
+(function (root) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const nfs = {};
+  const nf = d => nfs[d] || (nfs[d] = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }));
+  const trim = x => nf(1).format(x).replace(/,0$/, '');
+  const compact = v => {
+    const a = Math.abs(v);
+    return a >= 1e6 ? trim(v / 1e6) + ' млн' : a >= 1e3 ? trim(v / 1e3) + ' тыс.' : trim(v);
+  };
+  const fmtVal = (v, unit) => (unit === '₽' ? nf(0).format(Math.round(v)) : nf(1).format(v)) + ' ' + unit;
+  const colorOf = s => (s.kind === 'total' ? 'var(--s-total)' : s.kind === 'other' ? 'var(--s-other)' : `var(--s${s.slot + 1})`);
+
+  function S(tag, attrs, parent) {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function h(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;      // имена рядов - данные из файла: только textContent
+    return n;
+  }
+
+  // «Красивые» деления оси: 0, 250, 500, 750, 1000
+  function niceScale(max) {
+    if (!(max > 0)) return { top: 1, ticks: [0, 1] };
+    const raw = max / 4, pow = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / pow;
+    const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+    const top = Math.ceil(max / step - 1e-9) * step, ticks = [];
+    for (let v = 0; v <= top + step / 1000; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+    return { top, ticks };
+  }
+
+  function buildLegend(refs, model, ui) {
+    const box = refs.legend;
+    box.textContent = '';
+    if (model.series.length < 2) return;           // одна линия - легенда не нужна: название в заголовке
+    model.series.forEach(s => {
+      const b = h('button', 'lg');
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(!ui.hidden.has(s.id)));
+      b.title = ui.hidden.has(s.id) ? 'Показать линию' : 'Скрыть линию';
+      const key = h('span', 'key');
+      key.style.setProperty('--c', colorOf(s));
+      b.append(key, h('span', 'nm', s.name), h('span', 'lgv', compact(s.sum) + ' ' + model.unit));
+      b.addEventListener('click', () => ui.onToggle(s.id));
+      box.appendChild(b);
+    });
+  }
+
+  function buildPlot(refs, model, ui) {
+    const host = refs.plot;
+    host.textContent = '';
+    const vis = model.series.filter(s => !ui.hidden.has(s.id));
+    if (!vis.length) { host.appendChild(h('div', 'none', 'Все линии скрыты. Включите нужные в легенде выше.')); return; }
+
+    const n = model.buckets.length;
+    const W = Math.max(260, host.clientWidth - 28 || 720), narrow = W < 560, H = narrow ? 260 : 340;
+    const L = 58, R = W < 640 ? 14 : 108, T = 12, B = 30, pw = W - L - R, ph = H - T - B;
+    let max = 0;
+    vis.forEach(s => s.values.forEach(v => { if (v > max) max = v; }));
+    const sc = niceScale(max);
+    const x = i => L + (n === 1 ? pw / 2 : (i * pw) / (n - 1));
+    const y = v => T + ph - (v / sc.top) * ph;
+
+    const ordered = vis.filter(s => s.kind !== 'total').concat(vis.filter(s => s.kind === 'total'));   // «Всего» рисуем поверх
+    const first = model.buckets[0].title, last = model.buckets[n - 1].title;
+    const svg = S('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, class: 'chsvg', role: 'img',
+      'aria-label': `График: ${vis.map(s => s.name).join(', ')}, ${model.unit}, с ${first} по ${last}. Те же данные есть в виде таблицы.` });
+
+    sc.ticks.forEach(t => {
+      S('line', { x1: L, x2: W - R, y1: y(t), y2: y(t), class: t === 0 ? 'ax' : 'g' }, svg);
+      S('text', { x: L - 8, y: y(t) + 4, 'text-anchor': 'end', class: 'yl' }, svg).textContent = compact(t);
+    });
+    const per = Math.max(2, Math.floor(pw / 64)), stepK = Math.max(1, Math.ceil(n / per));
+    for (let i = 0; i < n; i += stepK) {
+      const anchor = i === 0 && n > 1 ? 'start' : 'middle';
+      S('text', { x: x(i), y: H - 8, 'text-anchor': anchor, class: 'xl' }, svg).textContent = model.buckets[i].label;
+    }
+
+    ordered.forEach(s => {
+      const d = s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join('');
+      S('path', { d, class: 'ln' + (s.slot >= 0 ? ' s' + (s.slot + 1) : ''), style: `stroke:${colorOf(s)}` }, svg);
+    });
+    ordered.forEach(s => S('circle', { cx: x(n - 1), cy: y(s.values[n - 1]), r: 4, class: 'ed', style: `fill:${colorOf(s)}` }, svg));
+
+    // подписи у концов: не больше 4 линий, столкнувшиеся не двигаем (их несёт легенда), «Всего» - в приоритете
+    if (R >= 100 && vis.length <= 4) {
+      const prio = ordered.slice().sort((a, b) => (a.kind === 'total' ? -1 : b.kind === 'total' ? 1 : b.values[n - 1] - a.values[n - 1]));
+      const placed = [];
+      prio.forEach(s => {
+        const ey = y(s.values[n - 1]);
+        if (placed.some(p => Math.abs(p - ey) < 14)) return;
+        placed.push(ey);
+        S('line', { x1: W - R + 8, x2: W - R + 18, y1: ey, y2: ey, class: 'lk', style: `stroke:${colorOf(s)}` }, svg);
+        S('text', { x: W - R + 22, y: ey + 4, class: 'dl' }, svg).textContent = s.name.length > 13 ? s.name.slice(0, 12) + '…' : s.name;
+      });
+    }
+
+    // слой наведения
+    const cross = S('line', { y1: T, y2: T + ph, class: 'cx' }, svg);
+    const dots = ordered.map(s => S('circle', { r: 4, class: 'hd', style: `fill:${colorOf(s)}` }, svg));
+    cross.style.display = 'none'; dots.forEach(d => { d.style.display = 'none'; });
+    const hit = S('rect', { x: L, y: T, width: pw, height: ph, fill: 'transparent' }, svg);
+    const tip = h('div', 'chtip');
+    tip.hidden = true;
+    host.append(svg, tip);
+    host.tabIndex = 0;
+    host.setAttribute('role', 'group');
+    host.setAttribute('aria-label', 'График. Стрелками влево и вправо можно перемещаться по периодам.');
+
+    let cur = -1;
+    const hide = () => { tip.hidden = true; cross.style.display = 'none'; dots.forEach(d => { d.style.display = 'none'; }); cur = -1; };
+    const show = i => {
+      i = Math.max(0, Math.min(n - 1, i));
+      cur = i;
+      cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.style.display = '';
+      ordered.forEach((s, k) => { dots[k].setAttribute('cx', x(i)); dots[k].setAttribute('cy', y(s.values[i])); dots[k].style.display = ''; });
+      tip.textContent = '';
+      tip.appendChild(h('div', 'tt-h', model.buckets[i].title + (model.cumulative ? ' · нарастающим итогом' : '')));
+      vis.slice().sort((a, b) => (a.kind === 'total' ? -1 : b.kind === 'total' ? 1 : b.values[i] - a.values[i])).forEach(s => {
+        const r = h('div', 'tt-r');
+        const key = h('span', 'key');
+        key.style.setProperty('--c', colorOf(s));
+        r.append(key, h('b', null, fmtVal(s.values[i], model.unit)), h('span', 'tn', s.name));   // значение - главное, имя - вторично
+        tip.appendChild(r);
+      });
+      tip.hidden = false;
+      const tw = tip.offsetWidth, px = x(i);
+      let left = px + 14 + 14;                               // 14 - внутренний отступ блока графика
+      if (left + tw > W + 14 - 4) left = px - tw - 14 + 14;
+      tip.style.left = Math.max(4, left) + 'px';
+      tip.style.top = T + 12 + 'px';
+    };
+    const nearest = ev => {
+      const r = svg.getBoundingClientRect(), px = ((ev.clientX - r.left) * W) / (r.width || W);
+      return n === 1 ? 0 : Math.round(((px - L) / pw) * (n - 1));
+    };
+    hit.addEventListener('pointermove', ev => show(nearest(ev)));
+    hit.addEventListener('pointerdown', ev => show(nearest(ev)));
+    hit.addEventListener('pointerleave', ev => { if (ev.pointerType !== 'touch') hide(); });   // на касании подсказка остаётся до следующего касания
+    host.addEventListener('keydown', ev => {
+      if (ev.key === 'ArrowRight') { show(cur < 0 ? 0 : cur + 1); ev.preventDefault(); }
+      else if (ev.key === 'ArrowLeft') { show(cur < 0 ? n - 1 : cur - 1); ev.preventDefault(); }
+      else if (ev.key === 'Home') { show(0); ev.preventDefault(); }
+      else if (ev.key === 'End') { show(n - 1); ev.preventDefault(); }
+      else if (ev.key === 'Escape') hide();
+    });
+    host.addEventListener('focus', () => { if (cur < 0) show(n - 1); });
+    host.addEventListener('blur', hide);
+  }
+
+  // Вид «Таблица»: те же числа без наведения (и для тех, кому цвета не различить)
+  function buildTable(refs, model) {
+    const box = refs.table;
+    box.textContent = '';
+    const t = h('table', 'chtable');
+    const head = h('tr');
+    head.appendChild(h('th', null, 'Период'));
+    model.series.forEach(s => head.appendChild(h('th', 'r', s.name + ', ' + model.unit)));
+    t.appendChild(h('thead')).appendChild(head);
+    const body = h('tbody');
+    model.buckets.forEach((b, i) => {
+      const tr = h('tr');
+      tr.appendChild(h('td', null, b.title));
+      model.series.forEach(s => tr.appendChild(h('td', 'r', nf(model.unit === '₽' ? 0 : 1).format(s.values[i]))));
+      body.appendChild(tr);
+    });
+    t.appendChild(body);
+    const foot = h('tr');
+    foot.appendChild(h('td', null, model.cumulative ? 'Итого (на конец периода)' : 'Итого за период'));
+    model.series.forEach(s => foot.appendChild(h('td', 'r', nf(model.unit === '₽' ? 0 : 1).format(s.sum))));
+    t.appendChild(h('tfoot')).appendChild(foot);
+    box.appendChild(t);
+  }
+
+  /**
+   * refs: { legend, plot, table, foot } - элементы страницы;  ui: { hidden: Set(id), view: 'chart'|'table', onToggle(id) }
+   */
+  function draw(refs, model, ui) {
+    refs.foot.textContent = '';
+    refs.legend.textContent = '';
+    refs.plot.textContent = '';
+    refs.table.textContent = '';
+    if (model.empty) {
+      refs.plot.hidden = false; refs.table.hidden = true;
+      refs.plot.appendChild(h('div', 'none', 'Нет сделок с датой по выбранным фильтрам.' + (model.noDate ? ` Без даты: ${model.noDate}.` : '')));
+      return;
+    }
+    buildLegend(refs, model, ui);
+    const tableView = ui.view === 'table';
+    refs.plot.hidden = tableView; refs.table.hidden = !tableView;
+    if (tableView) buildTable(refs, model); else buildPlot(refs, model, ui);
+    if (model.noDate) refs.foot.textContent = `Сделки без даты в график не попали: ${model.noDate}.`;
+  }
+
+  root.LineChart = { draw, compact, fmtVal, niceScale };
+})(typeof self !== 'undefined' ? self : this);
 
 </script>
 <script>
@@ -1122,7 +1517,8 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   const { DIMS, VALUES } = Core;
   const LS_KEY = '3r-report-v1';
   const SNAP_VERSION = 4;   // v4: номера заявок как текст, «Бюджет», кто взял в работу в позициях; старые выгрузки просим загрузить заново
-  const DEFAULT_UI = { rowDim: 'material', colDim: 'width', value: 'm', split: true, groups: true, dateField: 'produced', showZero: false, maxReq: '', advOpen: false };
+  const DEFAULT_UI = { rowDim: 'material', colDim: 'width', value: 'm', split: true, groups: true, dateField: 'produced', showZero: false, maxReq: '', advOpen: false,
+    chMetric: 'budget', chSplit: 'manager', chStep: 'auto', chCum: false, chView: 'chart' };
 
   // выпадающие списки с галочками; search - со строкой поиска внутри (для длинного списка материалов)
   const FILTER_DIMS = [
@@ -1137,7 +1533,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 
   const state = {
     snaps: [], active: null, ui: { ...DEFAULT_UI },
-    f: emptyFilters(), sortCol: null, pv: null, drills: [],
+    f: emptyFilters(), sortCol: null, pv: null, drills: [], chartHidden: new Set(),
   };
 
   function emptyFilters() {
@@ -1327,6 +1723,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     $('split').parentElement.style.opacity = mat ? 1 : .45; $('grp').parentElement.style.opacity = mat ? 1 : .45;
     const dates = activeData().items.map(i => i[u.dateField]).filter(Boolean).sort();
     $('from').min = $('to').min = dates[0] || ''; $('from').max = $('to').max = dates[dates.length - 1] || '';
+    $('chMetric').value = u.chMetric; fillChartSplit(); $('chStep').value = u.chStep; $('chCum').checked = !!u.chCum;
     updateYears();
     updateReqHint();
   }
@@ -1463,6 +1860,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     state.pv = { p, cfg, items, deals, data };
     renderReqWarn();
     renderReports(deals, data);
+    renderChart();
     renderKpis(items, deals);
     renderTable(p, cfg);
     renderNotes(p, Core.universe(data.items, cfg));
@@ -1552,6 +1950,34 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
         b.rows.map(x => `<tr class="pl clk" ${reg('budget', x.name, 'Взял в работу', x.deals)}><th class="t">${esc(x.name)}<span class="n">${x.n} зак.</span></th><td>${fmtR(x.budget)}</td><td>${fmtR(x.avg)}</td></tr>`).join('') +
         '</tbody></table>';
     }
+  }
+
+  // ---------------------------------------------------------------- график: динамика бюджета и квадратуры
+
+  const CH_SPLIT_LABEL = { total: 'Общий', manager: 'По менеджерам', printer: 'По печатникам' };
+  const CH_SPLITS_BY_METRIC = { budget: ['total', 'manager'], area: ['total', 'manager', 'printer'] };
+
+  function fillChartSplit() {
+    const u = state.ui, allowed = CH_SPLITS_BY_METRIC[u.chMetric] || ['total'];
+    if (!allowed.includes(u.chSplit)) u.chSplit = allowed.includes('manager') ? 'manager' : allowed[0];
+    $('chSplit').innerHTML = allowed.map(k => `<option value="${k}">${CH_SPLIT_LABEL[k]}</option>`).join('');
+    $('chSplit').value = u.chSplit;
+  }
+
+  function renderChart() {
+    const u = state.ui, { deals, data } = state.pv;
+    // цвета закреплены за именами по ВСЕМ данным, а не по текущему срезу: фильтр не перекрашивает оставшиеся линии
+    const order = Core.rankNames(data.deals, u.chMetric, u.chSplit);
+    const m = state.pv.chart = Core.timeSeries(deals, { metric: u.chMetric, split: u.chSplit, step: u.chStep, cumulative: u.chCum, dateField: u.dateField, order, maxSeries: 6 });
+    const metric = Core.CHART_METRICS[u.chMetric];
+    const dfLabel = { produced: 'по дате передачи в производство', created: 'по дате создания', modified: 'по дате изменения' }[u.dateField];
+    $('chTitle').textContent = `${metric.label}: ${CH_SPLIT_LABEL[u.chSplit].toLowerCase()}, ${metric.unit}`;
+    $('chSub').textContent = [{ day: 'по дням', week: 'по неделям', month: 'по месяцам' }[m.step], u.chCum ? 'нарастающим итогом' : '', dfLabel].filter(Boolean).join(' · ');
+    document.querySelectorAll('#chView button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === u.chView)));
+    LineChart.draw({ legend: $('chLegend'), plot: $('chPlot'), table: $('chTable'), foot: $('chFoot') }, m, {
+      hidden: state.chartHidden, view: u.chView,
+      onToggle: id => { if (state.chartHidden.has(id)) state.chartHidden.delete(id); else state.chartHidden.add(id); renderChart(); },
+    });
   }
 
   function renderKpis(items, deals) {
@@ -1771,6 +2197,13 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       budgeted.rows.forEach(x => a.push([x.name, rnd(x.budget), rnd(x.avg), x.n]));
       XLSX.utils.book_append_sheet(wb, sheetOf(a, [44, 16, 16, 10]), 'Бюджет');
     }
+    const ch = state.pv.chart;
+    if (ch && !ch.empty) {
+      const a = [[`${Core.CHART_METRICS[ch.metric].label}: динамика, ${ch.unit}`], [subtitle() + (ch.cumulative ? ' · нарастающим итогом' : '')], [], ['Период', ...ch.series.map(x => x.name)]];
+      ch.buckets.forEach((b, i) => a.push([b.title, ...ch.series.map(x => x.values[i])]));
+      a.push(['Итого', ...ch.series.map(x => x.sum)]);
+      XLSX.utils.book_append_sheet(wb, sheetOf(a, [26, ...ch.series.map(() => 16)]), 'Динамика');
+    }
     if (p.rows.length) XLSX.utils.book_append_sheet(wb, ws, 'Расход материала');
     XLSX.writeFile(wb, `3R_rashod_${isoLocal(new Date())}.xlsx`);
   }
@@ -1856,6 +2289,23 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       const tr = e.target.closest('tr[data-dk]');
       if (tr) openDeals(state.drills[+tr.dataset.dk]);
     }));
+    // настройки самого графика: показатель, разрез, шаг, нарастающий итог, вид
+    on('chMetric', 'change', e => { state.ui.chMetric = e.target.value; state.chartHidden.clear(); fillChartSplit(); save(); renderChart(); });
+    on('chSplit', 'change', e => { state.ui.chSplit = e.target.value; state.chartHidden.clear(); save(); renderChart(); });
+    on('chStep', 'change', e => { state.ui.chStep = e.target.value; save(); renderChart(); });
+    on('chCum', 'change', e => { state.ui.chCum = e.target.checked; save(); renderChart(); });
+    document.querySelectorAll('#chView button').forEach(b => b.addEventListener('click', () => { state.ui.chView = b.dataset.v; save(); renderChart(); }));
+    // перерисовка при смене ширины (поворот планшета, окно): и по событию окна, и по размеру самого блока
+    let resizeTimer, lastChartW = 0;
+    const redrawIfWider = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const w = $('chartBox').clientWidth;
+        if (state.pv && !$('report').hidden && w && Math.abs(w - lastChartW) > 2) { lastChartW = w; renderChart(); }
+      }, 120);
+    };
+    window.addEventListener('resize', redrawIfWider);
+    if (window.ResizeObserver) new ResizeObserver(redrawIfWider).observe($('chartBox'));
     on('kpis', 'click', e => {
       if (!e.target.closest('[data-act="noCons"]')) return;
       openDeals({ kind: 'nocons', title: 'Заявки без расхода материала', sub: 'Расход равен 0 м, не внесён печатником или заказ ещё в работе', deals: (state.pv && state.pv.noCons) || [] });
