@@ -1,0 +1,11 @@
+# Сюда НИКОГДА не должны попадать выгрузки и данные. Публикуется только index.html.
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.tsv
+*.ods
+*.json
+*.zip
+tests/
+fixtures/
