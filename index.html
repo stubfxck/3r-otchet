@@ -1030,23 +1030,28 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 
   /**
    * «Отчёт по бюджету»: по тому, кто взял в работу («Ответственный» здесь не используется - это другие данные).
-   * Две суммы: колонка «Бюджет» и колонка «Сумма за печать», каждая только из своей колонки.
+   * Бюджет - только из колонки «Бюджет». Средний чек менеджера = его бюджет / число его заявок.
+   * Сверху - средний чек средних чеков менеджеров (avg): простое среднее по менеджерам, а не общий (avgAll = весь бюджет / все заявки).
    */
   function budgetReport(deals, opts) {
     opts = opts || {};
     const by = new Map();
-    const mk = name => ({ name, budget: 0, print: 0, n: 0, deals: [] });
+    const mk = name => ({ name, budget: 0, n: 0, avg: 0, deals: [] });
     for (const d of deals) {
       if (!d.tookBy) continue;
       const r = by.get(d.tookBy) || mk(d.tookBy);
-      r.budget += d.budget; r.print += d.printSum; r.n++; r.deals.push(d); by.set(d.tookBy, r);
+      r.budget += d.budget; r.n++; r.deals.push(d); by.set(d.tookBy, r);
     }
     if (opts.showZero) (opts.allNames || []).forEach(nm => { if (!by.has(nm)) by.set(nm, mk(nm)); });
-    const rows = [...by.values()].filter(r => opts.showZero || round2(r.budget) !== 0 || round2(r.print) !== 0)
+    const rows = [...by.values()].filter(r => opts.showZero || round2(r.budget) !== 0)
       .sort((a, b) => b.budget - a.budget || a.name.localeCompare(b.name, 'ru'));
+    rows.forEach(r => { r.avg = r.n ? r.budget / r.n : 0; });
+    const n = rows.reduce((t, r) => t + r.n, 0), budget = rows.reduce((t, r) => t + r.budget, 0);
     return {
-      rows, n: rows.reduce((t, r) => t + r.n, 0), deals: rows.flatMap(r => r.deals),
-      budget: round2(rows.reduce((t, r) => t + r.budget, 0)), print: round2(rows.reduce((t, r) => t + r.print, 0)),
+      rows, n, deals: rows.flatMap(r => r.deals),
+      budget: round2(budget),
+      avg: rows.length ? round2(rows.reduce((t, r) => t + r.avg, 0) / rows.length) : 0,
+      avgAll: n ? round2(budget / n) : 0,
     };
   }
 
@@ -1542,9 +1547,9 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     else if (!rd.budgeted.rows.length) notice(box, 'Отчёт по бюджету', noData);
     else {
       const b = rd.budgeted;
-      box.innerHTML = '<h3>Отчёт по бюджету</h3><table class="rp list"><thead><tr><th class="t"></th><th>Бюджет</th><th>Сумма за печать</th></tr></thead><tbody>' +
-        `<tr class="mh clk" ${reg('budget', 'Взял в работу: все сделки', 'Бюджет и сумма за печать', b.deals)}><th class="t">Взял в работу</th><td>${fmtR(b.budget)}</td><td>${fmtR(b.print)}</td></tr>` +
-        b.rows.map(x => `<tr class="pl clk" ${reg('budget', x.name, 'Взял в работу', x.deals)}><th class="t">${esc(x.name)}<span class="n">${x.n} зак.</span></th><td>${fmtR(x.budget)}</td><td>${fmtR(x.print)}</td></tr>`).join('') +
+      box.innerHTML = '<h3>Отчёт по бюджету</h3><table class="rp list"><thead><tr><th class="t"></th><th>Бюджет</th><th title="Бюджет менеджера / число его заявок">Средний чек</th></tr></thead><tbody>' +
+        `<tr class="mh clk" ${reg('budget', 'Взял в работу: все сделки', 'Бюджет', b.deals)}><th class="t">Взял в работу</th><td>${fmtR(b.budget)}</td><td title="Средний из средних чеков менеджеров. Общий чек (весь бюджет / все заявки): ${fmtR(b.avgAll)}">${fmtR(b.avg)}</td></tr>` +
+        b.rows.map(x => `<tr class="pl clk" ${reg('budget', x.name, 'Взял в работу', x.deals)}><th class="t">${esc(x.name)}<span class="n">${x.n} зак.</span></th><td>${fmtR(x.budget)}</td><td>${fmtR(x.avg)}</td></tr>`).join('') +
         '</tbody></table>';
     }
   }
@@ -1698,7 +1703,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   const DEAL_COLS = {
     printers:  ['req', 'id', 'name', 'machine', 'printer', 'area', 'print'],
     designers: ['req', 'id', 'name', 'designer', 'design'],
-    budget:    ['req', 'mat', 'name', 'id', 'who', 'budget', 'print'],
+    budget:    ['req', 'mat', 'name', 'id', 'who', 'budget'],
     nocons:    ['req', 'id', 'name', 'stage', 'mat', 'printer', 'who'],
   };
 
@@ -1761,9 +1766,10 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       XLSX.utils.book_append_sheet(wb, sheetOf(a, [34, 18, 10]), 'Дизайнеры');
     }
     if (budgeted.rows.length) {
-      const a = [['Отчёт по бюджету'], [subtitle()], [], ['Взял в работу', 'Бюджет, ₽', 'Сумма за печать, ₽', 'Заказов'], ['Всего', rnd(budgeted.budget), rnd(budgeted.print), budgeted.n]];
-      budgeted.rows.forEach(x => a.push([x.name, rnd(x.budget), rnd(x.print), x.n]));
-      XLSX.utils.book_append_sheet(wb, sheetOf(a, [34, 16, 20, 10]), 'Бюджет');
+      const a = [['Отчёт по бюджету'], [subtitle()], [], ['Взял в работу', 'Бюджет, ₽', 'Средний чек, ₽', 'Заказов'],
+        ['Всего (средний из средних чеков менеджеров)', rnd(budgeted.budget), rnd(budgeted.avg), budgeted.n]];
+      budgeted.rows.forEach(x => a.push([x.name, rnd(x.budget), rnd(x.avg), x.n]));
+      XLSX.utils.book_append_sheet(wb, sheetOf(a, [44, 16, 16, 10]), 'Бюджет');
     }
     if (p.rows.length) XLSX.utils.book_append_sheet(wb, ws, 'Расход материала');
     XLSX.writeFile(wb, `3R_rashod_${isoLocal(new Date())}.xlsx`);
