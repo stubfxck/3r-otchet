@@ -128,6 +128,13 @@ input[type="checkbox"] { accent-color: var(--accent); }
 .dd .menu label { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 4px; cursor: pointer; }
 .dd .menu label:hover { background: var(--head-bg); }
 .dd .menu label .v { margin-left: auto; color: var(--muted); font-size: 12px; padding-left: 12px; }
+.dd.wide .menu { min-width: 470px; max-height: 420px; }
+.dd.wide > summary { min-width: 230px; }
+.ddsearch { width: 100%; padding: 8px 10px; margin-bottom: 6px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); }
+.ddsearch:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.dd .list { display: flex; flex-direction: column; }
+.dd .list label[hidden] { display: none; }
+.dd .menu .acts { position: sticky; top: 0; background: var(--surface); }
 
 /* ---------- заголовок и отчёты (стиль исходной таблицы: плоско, красные линии) ---------- */
 .reptitle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 28px; margin: 30px 2px 18px; }
@@ -137,13 +144,16 @@ input[type="checkbox"] { accent-color: var(--accent); }
 .reptitle .grow { flex: 1; }
 .reptitle .check { min-height: 0; color: var(--muted); font-size: 13px; }
 
-.reports { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(280px, 1fr); gap: 20px 48px; align-items: start; }
+#reqWarn { margin-top: 10px; }
+.reports { margin-top: 26px; display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(280px, 1fr); gap: 20px 48px; align-items: start; }
 .side { display: grid; gap: 34px; }
 .card { padding: 0 4px; overflow-x: auto; }
 .card h3 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
 .card .none { color: var(--muted); padding: 14px 0; }
 
 table.rp { width: 100%; border-collapse: collapse; }
+.rp tr.clk { cursor: pointer; }
+.rp tr.clk:hover th, .rp tr.clk:hover td { background: var(--accent-soft); }
 .rp th, .rp td { padding: 5px 12px; white-space: nowrap; font-variant-numeric: tabular-nums; text-align: right; font-weight: 400; }
 .rp th.g { text-align: right; color: var(--muted); font-size: 13px; padding-right: 6px; width: 1%; }
 .rp th.t { text-align: left; }
@@ -201,7 +211,9 @@ table.rep { border-collapse: separate; border-spacing: 0; width: max-content; mi
 .rep .corner:hover { background: var(--head-bg); }
 .rep tbody th { position: sticky; left: 0; z-index: 2; background: var(--surface); text-align: left; font-weight: 500; border-right: 1px solid var(--border); }
 .rep td { text-align: right; font-variant-numeric: tabular-nums; }
-.rep td.v { cursor: pointer; background: color-mix(in srgb, var(--accent) calc(var(--h) * 100%), transparent); }
+.rep td.v { cursor: pointer; }
+.rep td.v.cell { background: color-mix(in srgb, var(--accent) calc(var(--h) * 100%), var(--surface)); }   /* смешиваем с фоном таблицы, а не с прозрачным */
+.rep tfoot td, .rep tfoot th, .rep td.totcol { background-color: var(--total-bg); }   /* итоговые ячейки всегда непрозрачные */
 .rep td.v:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
 .rep td.z { color: transparent; }
 .rep tr:hover th { background: var(--accent-soft); }
@@ -237,7 +249,7 @@ table.rep { border-collapse: separate; border-spacing: 0; width: max-content; mi
 .warns .ids { color: inherit; opacity: .75; font-size: 12px; word-break: break-all; }
 
 /* ---------- детализация ---------- */
-dialog { border: 1px solid var(--border-strong); border-radius: 12px; padding: 0; background: var(--surface); color: var(--text); width: min(880px, 94vw); max-height: 86vh; }
+dialog { border: 1px solid var(--border-strong); border-radius: 12px; padding: 0; background: var(--surface); color: var(--text); width: min(1180px, 96vw); max-height: 86vh; }
 dialog::backdrop { background: rgb(0 0 0 / .4); }
 dialog .dh { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
 dialog .dh h3 { margin: 0; font-size: 16px; }
@@ -310,7 +322,7 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
     <p>Перетащите файл .xlsx сюда или нажмите кнопку. Данные обрабатываются прямо в браузере и никуда не отправляются.</p>
     <ol>
       <li>AMO → «Сделки» → вид «Список» → «⋯» → «Экспорт»</li>
-      <li>Отметьте поля: <b>Номер заявки, Основа, Тип поверхности, Станок, Печатник, Общая площадь изделия, Сумма за печать, Сумма за остаток, Итоговая сумма, Дизайнер, Эскиз (фото), Взял в работу, Компания, ширина и длина расхода (I., II., …), Дата передано в производство</b>. Телефоны и почты отмечать не нужно</li>
+      <li>Отметьте поля: <b>Номер заявки, Основа, Тип поверхности, Станок, Печатник, Общая площадь изделия, Сумма за печать, Сумма за остаток, Бюджет, Дизайнер, Эскиз (фото), Взял в работу, Компания, ширина и длина расхода (I., II., …), Дата передано в производство</b>. Телефоны и почты отмечать не нужно</li>
       <li>Скачайте файл и загрузите его сюда. Следующую выгрузку можно загрузить так же: прошлые сохранятся</li>
     </ol>
     <div><label class="btn primary" id="btnUpload2" for="file" role="button" tabindex="0">Выбрать файл</label></div>
@@ -351,6 +363,9 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
       </div>
     </div>
 
+    <!-- примечание: заявки с мусорным номером, исключённые из отчётов -->
+    <div id="reqWarn" hidden></div>
+
     <!-- всё остальное свёрнуто -->
     <div class="panel" id="panel" hidden>
       <div class="row">
@@ -381,12 +396,17 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
       </div>
 
       <div class="row">
-        <div class="f"><label for="q">Поиск по материалу</label><input type="search" id="q" placeholder="например: БТ 440"></div>
+        <div class="f"><span class="lbl">Материал</span><div id="ddMaterial"></div></div>
         <div class="f"><span class="lbl">Тип материала</span><div id="ddGroup"></div></div>
         <div class="f"><span class="lbl">Станок</span><div id="ddMachine"></div></div>
         <div class="f"><span class="lbl">Качество</span><div id="ddDpi"></div></div>
         <div class="f"><span class="lbl">Печатник</span><div id="ddPrinter"></div></div>
         <div class="f"><span class="lbl">&nbsp;</span><button class="btn ghost" id="btnReset">Сбросить фильтры</button></div>
+      </div>
+
+      <div class="row">
+        <div class="f"><label for="maxReq">Макс. номер заявки</label><input type="number" id="maxReq" min="0" step="1" inputmode="numeric" placeholder="авто" style="width:140px"></div>
+        <div class="f"><span class="lbl">&nbsp;</span><label class="check"><input type="checkbox" id="showZero"> Показывать нулевые строки в отчётах</label></div>
       </div>
 
       <div class="row">
@@ -396,15 +416,6 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
         <div class="f"><span class="lbl">&nbsp;</span><label class="check"><input type="checkbox" id="split"> Мат и глянец отдельными строками</label></div>
         <div class="f"><span class="lbl">&nbsp;</span><label class="check"><input type="checkbox" id="grp"> Группировать по типу материала</label></div>
       </div>
-    </div>
-
-    <div class="reptitle">
-      <h2>Отчёт по заявкам:</h2>
-      <span class="rngnum" id="repFrom"></span>
-      <span class="rngnum" id="repTo"></span>
-      <span class="sub" id="repSub"></span>
-      <span class="grow"></span>
-      <label class="check"><input type="checkbox" id="showZero"> Показывать нулевые строки</label>
     </div>
 
     <div class="reports">
@@ -496,7 +507,6 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     created:  ['дата создания'],
     modified: ['дата изменения'],
     produced: ['дата передано в производство', 'дата передачи в производство'],
-    tags:     ['теги сделки', 'теги'],
     material: ['основа'],
     surface:  ['тип поверхности'],
     machine:  ['станок'],
@@ -507,10 +517,9 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     leftSum:  ['сумма за остаток'],
     designer: ['дизайнер'],
     designSum: ['эскиз (фото)', 'эскиз'],
-    total:    ['итоговая сумма', 'бюджет'],   // порядок важен: «Итоговая сумма» приоритетнее «Бюджета»
+    budget:   ['бюджет'],              // отчёт по бюджету берёт именно колонку «Бюджет»
     tookBy:   ['взял в работу'],
     company:  ['компания'],
-    companyContact: ['компания контакта'],
   };
   const REQUIRED = { material: 'Основа' };
   const SLOT_RE = /^([ivxl]+)\.\s*(ширина|длина)\s*\(\s*расход/;
@@ -576,16 +585,32 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 
   const numOr0 = v => { const n = num(v); return Number.isFinite(n) ? n : 0; };
 
-  // «Номер заявки» лежит строкой: "12235". Берём первое число, чтобы «12235-2» тоже разобралось.
-  function parseRequest(v) {
-    const m = String(v == null ? '' : v).match(/\d+/);
-    return m ? parseInt(m[0], 10) : null;
+  // «Номер заявки» в AMO - ТЕКСТОВОЕ поле: "12235", " 12235", "12 235", "№12235", а иногда мусор («рувру»).
+  //   n   - число, если оно есть;  bad - в поле есть текст, но числа нет (такая заявка некорректна);
+  //   odd - число с приставкой ("12235-2"): берём число, но помечаем.
+  function parseRequestCell(v) {
+    const empty = { n: null, bad: false, odd: false, raw: '' };
+    if (v == null || v === '') return empty;
+    if (typeof v === 'number') {
+      return isFinite(v) && v >= 0 && Math.abs(v - Math.round(v)) < 1e-9
+        ? { n: Math.round(v), bad: false, odd: false, raw: String(Math.round(v)) }
+        : { n: null, bad: true, odd: false, raw: String(v) };
+    }
+    const raw = String(v).trim();
+    if (!raw) return empty;
+    const t = raw.replace(/\s+/g, '').replace(/^[№#]/, '');
+    if (/^\d+([.,]0+)?$/.test(t)) return { n: parseInt(t, 10), bad: false, odd: false, raw };
+    const m = t.match(/^(\d+)/);
+    if (m) return { n: parseInt(m[1], 10), bad: false, odd: true, raw };
+    return { n: null, bad: true, odd: false, raw };
   }
-  const toReq = v => (v === '' || v == null ? null : parseRequest(v));
+  // то, что пользователь вводит в поля фильтра: оставляем только цифры
+  const toReq = v => { const d = String(v == null ? '' : v).replace(/\D/g, ''); return d ? parseInt(d, 10) : null; };
+  const parseRequest = toReq;
 
-  const INTERNAL_RE = /^\s*производство(?![а-яёa-z])/i;   // \b с кириллицей в JS не работает
+  const INTERNAL_RE = /^\s*ПРОИЗВОДСТВО(?![А-ЯЁа-яёA-Za-z])/;   // только компании с подписью «ПРОИЗВОДСТВО …», как в AMO
   const FIELD_LABELS = { machine: 'Станок', printer: 'Печатник', area: 'Общая площадь изделия', printSum: 'Сумма за печать',
-    designer: 'Дизайнер', designSum: 'Эскиз (фото)', total: 'Итоговая сумма (или Бюджет)', tookBy: 'Взял в работу' };
+    designer: 'Дизайнер', designSum: 'Эскиз (фото)', budget: 'Бюджет', tookBy: 'Взял в работу', company: 'Компания' };
 
   const pad = n => String(n).padStart(2, '0');
   const iso = (y, m, d) => `${y}-${pad(m)}-${pad(d)}`;
@@ -612,14 +637,6 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     if (!s) return null;
     if (s.startsWith('мат')) return SURFACE_MAT;
     if (s.startsWith('глян')) return SURFACE_GLOSS;
-    return null;
-  }
-  function surfaceFromTags(tags) {
-    const parts = String(tags || '').split(/[,;]/).map(normText);
-    const m = parts.some(p => p === 'мат' || p === 'матовый');
-    const g = parts.some(p => p === 'глянец' || p === 'глянцевый');
-    if (m && !g) return SURFACE_MAT;
-    if (g && !m) return SURFACE_GLOSS;
     return null;
   }
 
@@ -664,7 +681,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 
     const deals = [], items = [], warnings = [];
     const warn = (type, text, ids) => warnings.push({ type, text, ids: ids || [] });
-    const w = { noSurface: [], conflict: [], badNum: [], noWidth: [], noMaterial: [] };
+    const w = { noSurface: [], badNum: [], noWidth: [], noMaterial: [] };
     let zeroItems = 0;
 
     for (let r = hr + 1; r < aoa.length; r++) {
@@ -673,26 +690,28 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       const id = String(get(row, 'id') == null ? 'row' + (r + 1) : get(row, 'id')).trim();
       const mat = parseMaterial(get(row, 'material'));
 
-      const fSurf = surfaceFromField(get(row, 'surface'));
-      const tSurf = surfaceFromTags(get(row, 'tags'));
-      const surface = fSurf || tSurf || SURFACE_NONE;
+      // Мат/Глянец берём только из колонки «Тип поверхности». Теги сделки не используются: в них бывает другое значение.
+      const surface = surfaceFromField(get(row, 'surface')) || SURFACE_NONE;
 
       const str = f => String(get(row, f) == null ? '' : get(row, f)).trim();
       const machine = str('machine') || (mat.machine ? mat.machine + ' м' : '');
+      const rq = parseRequestCell(get(row, 'request'));
       const deal = {
         id,
         name: str('name'),
         stage: str('stage'),
-        req: parseRequest(get(row, 'request')),
+        req: rq.n,
+        reqRaw: (rq.bad || rq.odd) ? rq.raw : undefined,   // храним только нестандартное значение
+        reqBad: rq.bad || undefined,
         created: parseDate(get(row, 'created')),
         modified: parseDate(get(row, 'modified')),
         produced: parseDate(get(row, 'produced')),
         material: mat.name, group: mat.group, surface, machine, dpi: mat.dpi || '', printer: str('printer'),
         area: numOr0(get(row, 'area')), printSum: numOr0(get(row, 'printSum')), leftSum: numOr0(get(row, 'leftSum')),
         designer: str('designer'), designSum: numOr0(get(row, 'designSum')),
-        total: numOr0(get(row, 'total')), tookBy: str('tookBy'),
+        budget: numOr0(get(row, 'budget')), tookBy: str('tookBy'),
         // заказ компании «Производство …» - собственные заказы; в базе хранится только признак, без названия
-        internal: INTERNAL_RE.test(str('company')) || INTERNAL_RE.test(str('companyContact')),
+        internal: INTERNAL_RE.test(str('company')),
         hasMaterial: !!mat.name,
         consumption: false,   // есть хотя бы одна позиция с расходом > 0
         zeroFilled: false,    // расход внесён, но везде 0 - печатник не заполнил или реально ноль
@@ -706,7 +725,6 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
         if (!(wv > 0)) w.noWidth.push(id);
         if (!mat.name) w.noMaterial.push(id);
         if (surface === SURFACE_NONE) w.noSurface.push(id);
-        if (fSurf && tSurf && fSurf !== tSurf) w.conflict.push(id);
         deal.consumption = true;
         items.push({
           dealId: id, name: deal.name, slot: slot.roman,
@@ -714,7 +732,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
           machine, dpi: deal.dpi,
           surface,
           w: Math.round(wv * 1000) / 1000, l: Math.round(lv * 1000) / 1000,
-          printer: deal.printer, req: deal.req,
+          printer: deal.printer, req: deal.req, tookBy: deal.tookBy,
           produced: deal.produced, created: deal.created, modified: deal.modified, stage: deal.stage,
         });
       }
@@ -723,8 +741,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     const zeroDeals = deals.filter(d => !d.consumption && d.zeroFilled);
 
     const uniq = a => [...new Set(a)];
-    if (w.noSurface.length) warn('surface', `Тип поверхности (мат/глянец) не указан ни в поле, ни в тегах - позиции идут как «Не указано»: ${uniq(w.noSurface).length} сдел.`, uniq(w.noSurface));
-    if (w.conflict.length) warn('surface', `Поле «Тип поверхности» и тег сделки расходятся - взято значение поля: ${uniq(w.conflict).length} сдел.`, uniq(w.conflict));
+    if (w.noSurface.length) warn('surface', `В колонке «Тип поверхности» пусто (теги сделки не учитываются) - позиции идут как «Не указано»: ${uniq(w.noSurface).length} сдел.`, uniq(w.noSurface));
     if (w.noWidth.length) warn('width', `Расход указан, а ширина рулона нет - уйдёт в столбец «не указана»: ${uniq(w.noWidth).length} сдел.`, uniq(w.noWidth));
     if (w.noMaterial.length) warn('material', `Расход есть, а «Основа» пуста: ${uniq(w.noMaterial).length} сдел.`, uniq(w.noMaterial));
     if (w.badNum.length) warn('number', `Нечисловое значение в ширине/длине расхода - позиция пропущена: ${uniq(w.badNum).length} сдел.`, uniq(w.badNum));
@@ -734,25 +751,27 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
         (ready ? ` (из них на этапе «готово»: ${ready})` : '') + '. Проверьте, что печатник заполнил расход.', zeroDeals.map(d => d.id));
     }
     if (!c.produced) warn('date', 'В файле нет колонки «Дата передано в производство» - период можно считать только по дате создания/изменения.');
-    if (!c.surface && !c.tags) warn('surface', 'В файле нет ни «Тип поверхности», ни «Теги сделки» - разделить мат и глянец не получится.');
+    if (!c.surface) warn('surface', 'В файле нет колонки «Тип поверхности» - разделить мат и глянец не получится (теги сделки не используются).');
 
     if (c.material === undefined) warn('report', 'В файле нет колонки «Основа» - таблица расхода материала будет пустой.');
     if (!map.slots.length) warn('report', 'В файле нет колонок расхода «I. Ширина (расход м.)» / «I. Длина (расход м.)» - таблица расхода материала будет пустой.');
     if (!c.request) warn('request', 'В файле нет колонки «Номер заявки» - фильтр по номерам заявок работать не будет.');
+    const oddReq = deals.filter(d => d.req != null && d.reqRaw && !d.reqBad);
+    if (oddReq.length) warn('request', `Номер заявки записан не одним числом («${oddReq[0].reqRaw}» и т.п.) - взято первое число: ${oddReq.length} сдел.`, oddReq.map(d => d.id));
     const needPrint = ['machine', 'printer', 'area', 'printSum'].filter(f => c[f] === undefined);
     if (needPrint.length) warn('report', `Для отчёта по печатникам не хватает колонок: ${needPrint.map(f => FIELD_LABELS[f]).join(', ')}.`);
     const needDes = ['designer', 'designSum'].filter(f => c[f] === undefined);
     if (needDes.length) warn('report', `Для отчёта по дизайнерам не хватает колонок: ${needDes.map(f => FIELD_LABELS[f]).join(', ')}.`);
-    const needSum = ['tookBy', 'total'].filter(f => c[f] === undefined);
-    if (needSum.length) warn('report', `Для отчёта по суммам не хватает колонок: ${needSum.map(f => FIELD_LABELS[f]).join(', ')}.`);
-    if (c.company === undefined && c.companyContact === undefined) warn('report', 'Нет колонки «Компания» - строку «Производство» в отчёте по печатникам определить нельзя.');
+    const needSum = ['tookBy', 'budget'].filter(f => c[f] === undefined);
+    if (needSum.length) warn('report', `Для отчёта по бюджету не хватает колонок: ${needSum.map(f => FIELD_LABELS[f]).join(', ')}.`);
+    if (c.company === undefined) warn('report', 'Нет колонки «Компания» - строку «Производство» в отчёте по печатникам определить нельзя.');
 
     const dates = items.map(i => i.produced).filter(Boolean).sort();
     const caps = {};
     Object.keys(FIELD_ALIASES).forEach(f => { caps[f] = c[f] !== undefined; });
     caps.slots = map.slots.length > 0;
     // в хранилище кладём только «настоящие» сделки: неразобранное без основы/станка/дизайнера не нужно
-    const keep = d => d.hasMaterial || d.machine || d.designer || d.tookBy || d.req != null;
+    const keep = d => d.hasMaterial || d.machine || d.designer || d.tookBy || d.req != null || d.reqBad;
     const stored = deals.filter(keep).map(d => {
       const { hasMaterial, consumption, zeroFilled, ...rest } = d;
       return rest;
@@ -941,8 +960,8 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   const DONE_RE = /готов/i;                       // этап «Изделие готово»
   const isDone = d => DONE_RE.test(d.stage || '');
 
-  const newSum = () => ({ n: 0, area: 0, print: 0, left: 0 });
-  const addSum = (t, d, withLeft) => { t.n++; t.area += d.area; t.print += d.printSum; if (withLeft) t.left += d.leftSum; };
+  const newSum = () => ({ n: 0, area: 0, print: 0, left: 0, deals: [] });   // deals - для детализации по клику
+  const addSum = (t, d, withLeft) => { t.n++; t.area += d.area; t.print += d.printSum; if (withLeft) t.left += d.leftSum; t.deals.push(d); };
   const isZeroSum = t => round2(t.area) === 0 && round2(t.print) === 0 && round2(t.left) === 0;
 
   // Порядок станков как в отчёте заказчика: 2,6м, 3,2м, потом баннер и УФ.
@@ -996,56 +1015,109 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     const by = new Map();
     for (const d of deals) {
       if (!d.designer) continue;
-      const r = by.get(d.designer) || { name: d.designer, sum: 0, n: 0 };
-      r.sum += d.designSum; r.n++; by.set(d.designer, r);
+      const r = by.get(d.designer) || { name: d.designer, sum: 0, n: 0, deals: [] };
+      r.sum += d.designSum; r.n++; r.deals.push(d); by.set(d.designer, r);
     }
-    if (opts.showZero) (opts.allDesigners || []).forEach(nm => { if (!by.has(nm)) by.set(nm, { name: nm, sum: 0, n: 0 }); });
+    if (opts.showZero) (opts.allDesigners || []).forEach(nm => { if (!by.has(nm)) by.set(nm, { name: nm, sum: 0, n: 0, deals: [] }); });
     const rows = [...by.values()].filter(r => opts.showZero || round2(r.sum) !== 0)
       .sort((a, b) => b.sum - a.sum || a.name.localeCompare(b.name, 'ru'));
-    return { rows, total: round2(rows.reduce((s, r) => s + r.sum, 0)) };
+    return { rows, total: round2(rows.reduce((t, r) => t + r.sum, 0)), deals: rows.flatMap(r => r.deals) };
   }
 
-  /** «Отчёт по суммам»: сумма заказов по тому, кто взял в работу. */
-  function sumsReport(deals, opts) {
+  /**
+   * «Отчёт по бюджету»: по тому, кто взял в работу («Ответственный» здесь не используется - это другие данные).
+   * Две суммы: колонка «Бюджет» и колонка «Сумма за печать», каждая только из своей колонки.
+   */
+  function budgetReport(deals, opts) {
     opts = opts || {};
     const by = new Map();
+    const mk = name => ({ name, budget: 0, print: 0, n: 0, deals: [] });
     for (const d of deals) {
       if (!d.tookBy) continue;
-      const r = by.get(d.tookBy) || { name: d.tookBy, sum: 0, n: 0 };
-      r.sum += d.total; r.n++; by.set(d.tookBy, r);
+      const r = by.get(d.tookBy) || mk(d.tookBy);
+      r.budget += d.budget; r.print += d.printSum; r.n++; r.deals.push(d); by.set(d.tookBy, r);
     }
-    if (opts.showZero) (opts.allNames || []).forEach(nm => { if (!by.has(nm)) by.set(nm, { name: nm, sum: 0, n: 0 }); });
-    const rows = [...by.values()].filter(r => opts.showZero || round2(r.sum) !== 0)
-      .sort((a, b) => b.sum - a.sum || a.name.localeCompare(b.name, 'ru'));
-    return { rows, total: round2(rows.reduce((t, r) => t + r.sum, 0)), n: rows.reduce((t, r) => t + r.n, 0) };
+    if (opts.showZero) (opts.allNames || []).forEach(nm => { if (!by.has(nm)) by.set(nm, mk(nm)); });
+    const rows = [...by.values()].filter(r => opts.showZero || round2(r.budget) !== 0 || round2(r.print) !== 0)
+      .sort((a, b) => b.budget - a.budget || a.name.localeCompare(b.name, 'ru'));
+    return {
+      rows, n: rows.reduce((t, r) => t + r.n, 0), deals: rows.flatMap(r => r.deals),
+      budget: round2(rows.reduce((t, r) => t + r.budget, 0)), print: round2(rows.reduce((t, r) => t + r.print, 0)),
+    };
   }
 
   // Год записи: по выбранной дате, а если её нет - по дате передачи в производство, затем по дате создания.
   function yearOf(rec, df) { return (rec[df || 'produced'] || rec.produced || rec.created || '').slice(0, 4); }
   function years(recs, df) { return [...new Set(recs.map(r => yearOf(r, df)).filter(Boolean))].sort().reverse(); }
 
+  /**
+   * Чистка номеров заявок. Поле текстовое, в нём бывает мусор («рувру») и номера вроде 33154, хотя реальные кончаются около 12300.
+   * Такие сделки убираем из ВСЕХ отчётов и возвращаем список для примечания.
+   *   opts.maxReq - максимально допустимый номер, заданный вручную (12300);
+   *   иначе границы определяются сами: основная плотная группа номеров (разрывы > gap), всё за её пределами - выбросы.
+   * -> { deals, items, excluded: [{ id, name, req, raw, reason: 'text'|'high'|'low' }], range: { min, max, mode: 'auto'|'manual'|'none' } }
+   */
+  function cleanRequests(deals, items, opts) {
+    opts = opts || {};
+    const gap = opts.gap || 1000;
+    const nums = deals.filter(d => d.req != null && !d.reqBad).map(d => d.req).sort((a, b) => a - b);
+    let lo = -Infinity, hi = Infinity, mode = 'none';
+    if (nums.length >= 20) {
+      const groups = [];
+      let cur = [nums[0]];
+      for (let i = 1; i < nums.length; i++) {
+        if (nums[i] - nums[i - 1] > gap) { groups.push(cur); cur = []; }
+        cur.push(nums[i]);
+      }
+      groups.push(cur);
+      const main = groups.reduce((a, b) => (b.length > a.length ? b : a));
+      if (main.length >= nums.length * 0.9) { lo = main[0]; hi = main[main.length - 1]; mode = 'auto'; }
+    }
+    const manual = opts.maxReq != null && opts.maxReq !== '' && Number.isFinite(+opts.maxReq) ? +opts.maxReq : null;
+    if (manual != null) { hi = manual; mode = 'manual'; }
+    const excluded = [], gone = new Set();
+    for (const d of deals) {
+      let reason = null;
+      if (d.reqBad) reason = 'text';
+      else if (d.req != null && d.req > hi) reason = 'high';
+      else if (d.req != null && d.req < lo) reason = 'low';
+      if (reason) {
+        excluded.push({ id: d.id, name: d.name, req: d.req, raw: d.reqRaw || (d.req != null ? String(d.req) : ''), reason });
+        gone.add(d.id);
+      }
+    }
+    return {
+      deals: gone.size ? deals.filter(d => !gone.has(d.id)) : deals,
+      items: gone.size ? items.filter(i => !gone.has(i.dealId)) : items,
+      excluded, range: { min: isFinite(lo) ? lo : null, max: isFinite(hi) ? hi : null, mode },
+    };
+  }
+
   const distinct = (recs, key) => [...new Set(recs.map(r => r[key]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ru'));
 
   return {
     FIELD_ALIASES, DIMS, VALUES, SURFACE_MAT, SURFACE_GLOSS, SURFACE_NONE,
     normText, mapHeaders, num, parseDate, parseMaterial, materialGroup, parseRequest,
-    surfaceFromField, surfaceFromTags,
+    surfaceFromField, parseRequestCell,
     parseExport, mergeSnapshots, filterItems, pivot, universe, accValue, round2, fmtWidth, fmtDay,
-    printerReport, designerReport, sumsReport, isDone, isZeroSum, distinct, yearOf, years,
+    printerReport, designerReport, budgetReport, cleanRequests, isDone, isZeroSum, distinct, yearOf, years,
   };
 });
 
 </script>
 <script>
 'use strict';
-/* Интерфейс: загрузка выгрузок, фильтры, сводная таблица, детализация, экспорт. Логика - в core.js. */
+/* Интерфейс: загрузка выгрузок, фильтры, отчёты, детализация по клику, экспорт. Логика и расчёты - в core.js. */
 (function () {
   const $ = id => document.getElementById(id);
   const { DIMS, VALUES } = Core;
   const LS_KEY = '3r-report-v1';
-  const SNAP_VERSION = 3;   // v3: в сделках есть «Взял в работу» и итоговая сумма (отчёт по суммам); при смене формата старые выгрузки просим загрузить заново
-  const DEFAULT_UI = { rowDim: 'material', colDim: 'width', value: 'm', split: true, groups: true, dateField: 'produced', showZero: false };
+  const SNAP_VERSION = 4;   // v4: номера заявок как текст, «Бюджет», кто взял в работу в позициях; старые выгрузки просим загрузить заново
+  const DEFAULT_UI = { rowDim: 'material', colDim: 'width', value: 'm', split: true, groups: true, dateField: 'produced', showZero: false, maxReq: '', advOpen: false };
+
+  // выпадающие списки с галочками; search - со строкой поиска внутри (для длинного списка материалов)
   const FILTER_DIMS = [
+    { key: 'material', label: 'Материал', box: 'ddMaterial', search: true, alpha: true },
     { key: 'group', label: 'Тип материала', box: 'ddGroup' },
     { key: 'machine', label: 'Станок', box: 'ddMachine' },
     { key: 'dpi', label: 'Качество', box: 'ddDpi' },
@@ -1056,11 +1128,12 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 
   const state = {
     snaps: [], active: null, ui: { ...DEFAULT_UI },
-    f: emptyFilters(), sortCol: null, pv: null,
+    f: emptyFilters(), sortCol: null, pv: null, drills: [],
   };
 
   function emptyFilters() {
-    return { surface: 'all', q: '', reqFrom: '', reqTo: '', year: null, from: '', to: '', dims: { group: [], machine: [], dpi: [], printer: [] } };
+    return { surface: 'all', reqFrom: '', reqTo: '', year: null, from: '', to: '',
+      dims: { material: [], group: [], machine: [], dpi: [], printer: [] } };
   }
 
   // ---------------------------------------------------------------- утилиты
@@ -1071,6 +1144,9 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   const pad = n => String(n).padStart(2, '0');
   const isoLocal = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const fmtDT = ts => { const d = new Date(ts); return `${pad(d.getDate())}.${pad(d.getMonth() + 1)} ${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+  const fmtA = v => fmt(v, 1);            // квадратура
+  const fmtM = v => fmt(v, 1);            // деньги в отчёте по печатникам, как в исходной таблице: 105 728,0
+  const fmtR = v => fmt(Math.round(v), 0);
 
   let toastTimer;
   function toast(msg, isErr, sticky) {
@@ -1176,12 +1252,19 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   // ---------------------------------------------------------------- данные
 
   const activeSnaps = () => state.active === 'ALL' ? state.snaps : state.snaps.filter(s => s.id === state.active);
+
+  // Данные активной выгрузки уже без сделок с мусорным номером заявки («рувру», 33154 и т.п.); список исключённых - в data.excluded.
+  let dataCache = { key: '', value: null };
   function activeData() {
-    if (state.active === 'ALL') return Core.mergeSnapshots(state.snaps);
-    const sn = activeSnaps()[0];
-    return sn ? { items: sn.items, deals: sn.deals || [] } : { items: [], deals: [] };
+    const key = state.active + '|' + state.snaps.map(s => s.id).join(',') + '|' + state.ui.maxReq;
+    if (dataCache.key === key && dataCache.value) return dataCache.value;
+    let raw;
+    if (state.active === 'ALL') raw = Core.mergeSnapshots(state.snaps);
+    else { const sn = activeSnaps()[0]; raw = sn ? { items: sn.items, deals: sn.deals || [] } : { items: [], deals: [] }; }
+    const value = Core.cleanRequests(raw.deals, raw.items, { maxReq: state.ui.maxReq });
+    dataCache = { key, value };
+    return value;
   }
-  const activeItems = () => activeData().items;
   // какие поля вообще были в файле (true/false); нужно, чтобы отличить «нули» от «колонки нет»
   const capsNow = () => { const c = {}; activeSnaps().forEach(sn => Object.entries(sn.caps || {}).forEach(([k, v]) => { c[k] = c[k] || v; })); return c; };
   function resetForNewData() {
@@ -1224,15 +1307,15 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     $('valueSel').value = u.value;
     $('split').checked = u.split; $('grp').checked = u.groups;
     $('dateField').value = u.dateField;
-    $('from').value = state.f.from; $('to').value = state.f.to; $('q').value = state.f.q;
-    $('reqFrom').value = state.f.reqFrom; $('reqTo').value = state.f.reqTo; $('showZero').checked = !!u.showZero;
+    $('from').value = state.f.from; $('to').value = state.f.to;
+    $('reqFrom').value = state.f.reqFrom; $('reqTo').value = state.f.reqTo;
+    $('showZero').checked = !!u.showZero; $('maxReq').value = u.maxReq;
     document.querySelectorAll('#segSurface button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === state.f.surface)));
     setPanel(!u.advOpen);
     const mat = u.rowDim === 'material';
     $('split').disabled = !mat; $('grp').disabled = !mat;
     $('split').parentElement.style.opacity = mat ? 1 : .45; $('grp').parentElement.style.opacity = mat ? 1 : .45;
-    const items = activeItems();
-    const dates = items.map(i => i[u.dateField]).filter(Boolean).sort();
+    const dates = activeData().items.map(i => i[u.dateField]).filter(Boolean).sort();
     $('from').min = $('to').min = dates[0] || ''; $('from').max = $('to').max = dates[dates.length - 1] || '';
     updateYears();
     updateReqHint();
@@ -1246,16 +1329,46 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     $('year').value = String(state.f.year);
   }
 
-  // номера заявок среди сделок выбранного года (для подсказки и большого заголовка)
+  // номера заявок среди сделок выбранного года (уже без мусора)
   function reqRange() {
     const ds = Core.filterItems(activeData().deals, { year: state.f.year, dateField: state.ui.dateField });
     const r = ds.map(d => d.req).filter(x => x != null);
-    return r.length ? { min: Math.min(...r), max: Math.max(...r), n: r.length } : null;
+    if (!r.length) return null;
+    let min = r[0], max = r[0];
+    for (const x of r) { if (x < min) min = x; if (x > max) max = x; }
+    return { min, max, n: r.length };
   }
   function updateReqHint() {
-    const r = reqRange();
+    const r = reqRange(), rg = activeData().range;
     $('reqFrom').placeholder = r ? String(r.min) : ''; $('reqTo').placeholder = r ? String(r.max) : '';
-    $('reqHint').textContent = r ? `${state.f.year ? 'За ' + state.f.year + ' г.' : 'В выгрузке'}: заявки № ${r.min} – ${r.max} (${r.n} шт.). Пусто = все.` : 'В выгрузке нет номеров заявок.';
+    $('reqHint').textContent = r
+      ? `${state.f.year ? 'За ' + state.f.year + ' г.' : 'В выгрузке'}: заявки № ${r.min} – ${r.max} (${fmt(r.n, 0)} шт.). Пусто = все.`
+      : 'В выгрузке нет номеров заявок.';
+    $('maxReq').placeholder = rg.mode === 'auto' && rg.max != null ? `авто: ${rg.max}` : 'авто';
+  }
+
+  // Примечание о заявках с некорректным номером: их нет ни в одном отчёте.
+  function renderReqWarn() {
+    const box = $('reqWarn'), data = activeData(), ex = data.excluded;
+    if (!ex.length) { box.hidden = true; box.innerHTML = ''; return; }
+    const by = { text: [], high: [], low: [] };
+    ex.forEach(e => by[e.reason].push(e));
+    const list = (arr, key) => {
+      const c = new Map();
+      arr.forEach(e => { const k = key(e); c.set(k, (c.get(k) || 0) + 1); });
+      const all = [...c.entries()];
+      return all.slice(0, 15).map(([k, n]) => (n > 1 ? `${k} ×${n}` : k)).join(', ') + (all.length > 15 ? ` … и ещё ${all.length - 15}` : '');
+    };
+    const rg = data.range, parts = [];
+    if (by.high.length) parts.push(`Выше допустимого максимума ${rg.max != null ? rg.max : ''}: ${list(by.high, e => e.req)}`);
+    if (by.low.length) parts.push(`Ниже основного диапазона (от ${rg.min != null ? rg.min : ''}): ${list(by.low, e => e.req)}`);
+    if (by.text.length) parts.push(`В поле «Номер заявки» не число: ${list(by.text, e => '«' + e.raw + '»')}`);
+    const mode = rg.mode === 'manual' ? 'максимум задан вручную' : rg.mode === 'auto' ? 'границы определены автоматически' : '';
+    box.innerHTML = `<details class="warns"><summary>Исключено из отчётов: ${fmt(ex.length, 0)} сделок с некорректным номером заявки${rg.max != null ? ` (допустимый максимум ${rg.max}${mode ? ', ' + mode : ''})` : ''}</summary><ul>` +
+      parts.map(p => `<li>${esc(p)}</li>`).join('') +
+      `<li>Сделки (ID): <span class="ids">${esc(ex.slice(0, 40).map(e => e.id).join(', '))}${ex.length > 40 ? ` … и ещё ${ex.length - 40}` : ''}</span></li>` +
+      `<li>Если границы определены неверно, задайте «Макс. номер заявки» вручную: «Дополнительно».</li></ul></details>`;
+    box.hidden = false;
   }
 
   function applyTheme(t) {
@@ -1269,38 +1382,61 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     $('btnPanel').textContent = hidden ? 'Дополнительно ▾' : 'Дополнительно ▴';
   }
 
-  // Выпадающий мультивыбор. Пустой набор = «все».
+  // Совпадение при поиске в списке материалов: 0 - название НАЧИНАЕТСЯ с запроса («бт» → БТ 280…), 1 - с запроса начинается одно из слов, 2 - нет.
+  function matchRank(name, q) {
+    if (!q) return 0;
+    const n = Core.normText(name);
+    if (n.startsWith(q)) return 0;
+    return (' ' + n).includes(' ' + q) ? 1 : 2;
+  }
+
+  // Выпадающий список с галочками. Пустой набор = «все». Для длинных списков (материалы) сверху строка поиска.
   function buildFilters() {
     const { items, deals } = activeData();
     FILTER_DIMS.forEach(fd => {
       const totals = new Map();
       items.forEach(it => { const v = it[fd.key] || '—'; totals.set(v, (totals.get(v) || 0) + it.l); });
       deals.forEach(d => { const v = d[fd.key] || '—'; if (!totals.has(v)) totals.set(v, 0); });
-      const values = [...totals.keys()].sort((a, b) => fd.key === 'dpi' ? (+a || 0) - (+b || 0) : totals.get(b) - totals.get(a));
+      const values = [...totals.keys()].sort((a, b) => fd.alpha ? a.localeCompare(b, 'ru')
+        : fd.key === 'dpi' ? (+a || 0) - (+b || 0) : totals.get(b) - totals.get(a));
       const box = $(fd.box);
       const chosen = new Set(state.f.dims[fd.key]);
-      box.innerHTML = `<details class="dd"><summary></summary><div class="menu">
-        <div class="acts"><button data-a="all">Выбрать все</button><button data-a="none">Сбросить</button></div>
-        ${values.map(v => `<label><input type="checkbox" value="${esc(v)}" ${chosen.has(v) ? 'checked' : ''}> ${esc(v)}<span class="v num">${fmt(totals.get(v), 1)} м</span></label>`).join('')}
+      box.innerHTML = `<details class="dd${fd.search ? ' wide' : ''}"><summary></summary><div class="menu">
+        ${fd.search ? '<input type="search" class="ddsearch" placeholder="Поиск: например «БТ» или «БТ 3»" autocomplete="off">' : ''}
+        <div class="acts"><button data-a="all">${fd.search ? 'Выбрать найденные' : 'Выбрать все'}</button><button data-a="none">Сбросить</button></div>
+        <div class="list">${values.map((v, i) => `<label data-i="${i}" data-n="${esc(v)}"><input type="checkbox" value="${esc(v)}" ${chosen.has(v) ? 'checked' : ''}> ${esc(v)}<span class="v num">${fmt(totals.get(v), 1)} м</span></label>`).join('')}</div>
       </div></details>`;
-      const dd = box.firstChild;
+      const dd = box.firstChild, search = dd.querySelector('.ddsearch');
+      const labels = [...dd.querySelectorAll('.list label')];
       const upd = () => {
-        const sel = [...dd.querySelectorAll('input:checked')].map(i => i.value);
+        const sel = [...dd.querySelectorAll('input[type="checkbox"]:checked')].map(i => i.value);
         state.f.dims[fd.key] = sel.length === values.length ? [] : sel;
         dd.querySelector('summary').textContent = state.f.dims[fd.key].length ? `${fd.label}: ${state.f.dims[fd.key].length} из ${values.length}` : `${fd.label}: все`;
         dd.classList.toggle('on', state.f.dims[fd.key].length > 0);
       };
-      dd.addEventListener('change', () => { upd(); state.sortCol = null; draw(); });
+      dd.addEventListener('change', e => { if (e.target.classList.contains('ddsearch')) return; upd(); state.sortCol = null; draw(); });
       dd.querySelector('.acts').addEventListener('click', e => {
         const a = e.target.dataset.a; if (!a) return;
-        dd.querySelectorAll('input').forEach(i => { i.checked = a === 'all'; });
+        labels.forEach(l => { if (a === 'none' || !l.hidden) l.querySelector('input').checked = a === 'all'; });
         upd(); draw();
       });
+      if (search) {
+        // поиск: совпадения с началом названия - сверху, затем совпадения с началом слова; остальное скрыто
+        search.addEventListener('input', () => {
+          const q = Core.normText(search.value);
+          labels.forEach(l => {
+            const r = matchRank(l.dataset.n, q);
+            l.hidden = r === 2;
+            l.style.order = String(r * 100000 + (+l.dataset.i));
+          });
+        });
+        dd.addEventListener('toggle', () => { if (dd.open) setTimeout(() => search.focus(), 0); });
+      }
       upd();
     });
   }
 
-  // ---------------------------------------------------------------- отрисовка: отчёт
+  // ---------------------------------------------------------------- отрисовка: отчёты
 
   function cfgNow() {
     const u = state.ui;
@@ -1312,13 +1448,14 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     const cfg = cfgNow();
     const f = { ...state.f, dateField: state.ui.dateField };
     const items = Core.filterItems(data.items, f);
-    const deals = Core.filterItems(data.deals, f);      // тот же фильтр: заявки, период, материал, станок, печатник...
+    const deals = Core.filterItems(data.deals, f);      // тот же фильтр: заявки, год, материал, станок, печатник...
     const p = Core.pivot(items, cfg);
     state.pv = { p, cfg, items, deals, data };
+    renderReqWarn();
     renderReports(deals, data);
-    renderKpis(items);
+    renderKpis(items, deals);
     renderTable(p, cfg);
-    renderNotes(p, Core.universe(data.items, cfg), data.items.length, items.length);
+    renderNotes(p, Core.universe(data.items, cfg));
     $('tblTitle').textContent = `${VALUES[cfg.value].label}: ${DIMS[cfg.rowDim].label} × ${DIMS[cfg.colDim].label}`;
     $('tblSub').textContent = subtitle();
   }
@@ -1330,46 +1467,38 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     return r ? `все (№ ${r.min} – ${r.max})` : 'все сделки';
   }
 
-  function subtitle(withReq = true) {
-    const f = state.f, parts = withReq ? ['заявки: ' + reqText()] : [];
+  function subtitle() {
+    const f = state.f, parts = ['заявки: ' + reqText()];
     if (f.year) parts.push(`${f.year} г.`);
     const dfLabel = { produced: 'по дате передачи в производство', created: 'по дате создания', modified: 'по дате изменения' }[state.ui.dateField];
     if (f.from || f.to) parts.push(`период ${f.from ? Core.fmtDay(f.from) : '…'} – ${f.to ? Core.fmtDay(f.to) : '…'} (${dfLabel})`);
     if (f.surface !== 'all') parts.push(f.surface);
-    if (f.q) parts.push(`поиск «${f.q}»`);
-    FILTER_DIMS.forEach(fd => { if (f.dims[fd.key].length) parts.push(`${fd.label.toLowerCase()}: ${f.dims[fd.key].join(', ')}`); });
+    FILTER_DIMS.forEach(fd => { if (f.dims[fd.key].length) parts.push(`${fd.label.toLowerCase()}: ${f.dims[fd.key].slice(0, 3).join(', ')}${f.dims[fd.key].length > 3 ? ' …' : ''}`); });
     return parts.join(' · ');
   }
 
-  const fmtA = v => fmt(v, 1);            // квадратура
-  const fmtM = v => fmt(v, 1);            // деньги в отчёте по печатникам, как в исходной таблице: 105 728,0
-  const fmtR = v => fmt(Math.round(v), 0);
   const FIELD_NAME = { machine: 'Станок', printer: 'Печатник', area: 'Общая площадь изделия', printSum: 'Сумма за печать',
-    designer: 'Дизайнер', designSum: 'Эскиз (фото)', tookBy: 'Взял в работу', total: 'Итоговая сумма (или Бюджет)' };
+    designer: 'Дизайнер', designSum: 'Эскиз (фото)', tookBy: 'Взял в работу', budget: 'Бюджет' };
 
   function reportData(deals, data) {
     const zero = !!state.ui.showZero;
     return {
       printed: Core.printerReport(deals, { showZero: zero, allPrinters: Core.distinct(data.deals.filter(d => d.machine && Core.isDone(d)), 'printer') }),
       designed: Core.designerReport(deals, { showZero: zero, allDesigners: Core.distinct(data.deals, 'designer') }),
-      summed: Core.sumsReport(deals, { showZero: zero, allNames: Core.distinct(data.deals, 'tookBy') }),
+      budgeted: Core.budgetReport(deals, { showZero: zero, allNames: Core.distinct(data.deals, 'tookBy') }),
     };
   }
 
   function renderReports(deals, data) {
-    // большие номера в заголовке, как в исходной таблице: «Отчёт по заявкам: 18 923   19 084»
-    const rr = reqRange(), pr = Core.parseRequest;
-    const a = state.f.reqFrom !== '' ? pr(state.f.reqFrom) : (rr ? rr.min : null);
-    const b = state.f.reqTo !== '' ? pr(state.f.reqTo) : (rr ? rr.max : null);
-    $('repFrom').textContent = a == null ? '—' : fmt(a, 0);
-    $('repTo').textContent = b == null ? '—' : fmt(b, 0);
-    $('repSub').textContent = subtitle(false);
     const rd = state.pv.reports = reportData(deals, data);
     const caps = capsNow();
     const missing = keys => keys.filter(k => caps[k] === false).map(k => FIELD_NAME[k]);
     const notice = (box, title, text) => { box.innerHTML = `<h3>${title}</h3><div class="none">${text}</div>`; };
     const noData = 'Нет данных по выбранным фильтрам.';
     const noCols = list => `В выгрузке нет полей: ${esc(list.join(', '))}. Отметьте их при экспорте из AMO.`;
+    // каждая строка отчёта кликабельна: data-dk - номер списка сделок в state.drills
+    state.drills = [];
+    const reg = (kind, title, sub, list) => `data-dk="${state.drills.push({ kind, title, sub, deals: list }) - 1}"`;
 
     // --- по печатникам
     let box = $('printers'), miss = missing(['machine', 'printer', 'area', 'printSum']);
@@ -1380,41 +1509,54 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       const row3 = t => `<td>${fmtA(t.area)}</td><td>${fmtM(t.print)}</td><td class="dim">${fmtM(t.left)}</td>`;
       let h = '<table class="rp"><thead><tr><th class="g"></th><th class="t">Отчёт по печатникам</th><th>Квадратура</th><th>Сумма за печать</th><th class="dim">Сумма за остаток</th></tr></thead><tbody>';
       r.machines.forEach(m => {
-        h += `<tr class="mh"><th class="g">На станок передано</th><th class="t">${esc(m.machine)}</th>${row3(m.sent)}</tr>`;
-        m.rows.forEach((x, i) => { h += `<tr class="pl"><th class="g">${i === 0 ? 'Печатник:' : ''}</th><th class="t">${esc(x.name)}</th>${row3(x)}</tr>`; });
-        h += `<tr class="done"><th class="g"></th><th class="t">Итого исполнено:</th>${row3(m.done)}</tr>`;
+        h += `<tr class="mh clk" ${reg('printers', `На станок передано: ${m.machine}`, 'Все сделки, переданные на станок', m.sent.deals)}><th class="g">На станок передано</th><th class="t">${esc(m.machine)}</th>${row3(m.sent)}</tr>`;
+        m.rows.forEach((x, i) => {
+          h += `<tr class="pl clk" ${reg('printers', `${m.machine} · ${x.name}`, 'Исполнено (этап «готово»)', x.deals)}><th class="g">${i === 0 ? 'Печатник:' : ''}</th><th class="t">${esc(x.name)}</th>${row3(x)}</tr>`;
+        });
+        h += `<tr class="done clk" ${reg('printers', `${m.machine}: итого исполнено`, 'Исполнено (этап «готово»)', m.done.deals)}><th class="g"></th><th class="t">Итого исполнено:</th>${row3(m.done)}</tr>`;
       });
-      if (r.internal) h += `<tr class="internal"><th class="g"></th><th class="t">ПРОИЗВОДСТВО<small>заказы компаний «Производство …»; входят в суммы по станкам</small></th>${row3(r.internal)}</tr>`;
-      h += `<tr class="gt"><th class="g"></th><th class="t">Всего передано на станки</th>${row3(r.total)}</tr></tbody></table>`;
+      if (r.internal) h += `<tr class="internal clk" ${reg('printers', 'ПРОИЗВОДСТВО', 'Заказы компаний с подписью «ПРОИЗВОДСТВО …»', r.internal.deals)}><th class="g"></th><th class="t">ПРОИЗВОДСТВО<small>компании с подписью «ПРОИЗВОДСТВО …»; входят в суммы по станкам</small></th>${row3(r.internal)}</tr>`;
+      h += `<tr class="gt clk" ${reg('printers', 'Всего передано на станки', 'Все сделки со станком', r.total.deals)}><th class="g"></th><th class="t">Всего передано на станки</th>${row3(r.total)}</tr></tbody></table>`;
       box.innerHTML = h;
     }
 
-    // --- списки «имя - сумма»: дизайнеры и «взял в работу»
-    const list = (box, title, head, rows, total) => {
-      box.innerHTML = `<h3>${title}</h3><table class="rp list"><tbody><tr class="mh"><th class="t">${head}</th><td>${fmtR(total)}</td></tr>` +
-        rows.map(x => `<tr class="pl"><th class="t">${esc(x.name)}<span class="n">${x.n} зак.</span></th><td>${fmtR(x.sum)}</td></tr>`).join('') + '</tbody></table>';
-    };
+    // --- по дизайнерам
     box = $('designers'); miss = missing(['designer', 'designSum']);
     if (miss.length) notice(box, 'Отчёт по дизайнерам', noCols(miss));
     else if (!rd.designed.rows.length) notice(box, 'Отчёт по дизайнерам', noData);
-    else list(box, 'Отчёт по дизайнерам', 'Дизайнеры', rd.designed.rows, rd.designed.total);
+    else {
+      box.innerHTML = '<h3>Отчёт по дизайнерам</h3><table class="rp list"><tbody>' +
+        `<tr class="mh clk" ${reg('designers', 'Дизайнеры: все сделки', 'Сумма за дизайн', rd.designed.deals)}><th class="t">Дизайнеры</th><td>${fmtR(rd.designed.total)}</td></tr>` +
+        rd.designed.rows.map(x => `<tr class="pl clk" ${reg('designers', x.name, 'Сумма за дизайн', x.deals)}><th class="t">${esc(x.name)}<span class="n">${x.n} зак.</span></th><td>${fmtR(x.sum)}</td></tr>`).join('') +
+        '</tbody></table>';
+    }
 
-    box = $('sums'); miss = missing(['tookBy', 'total']);
-    if (miss.length) notice(box, 'Отчёт по суммам', noCols(miss));
-    else if (!rd.summed.rows.length) notice(box, 'Отчёт по суммам', noData);
-    else list(box, 'Отчёт по суммам', 'Взял в работу', rd.summed.rows, rd.summed.total);
+    // --- по бюджету: «Взял в работу», колонки «Бюджет» и «Сумма за печать»
+    box = $('sums'); miss = missing(['tookBy', 'budget']);
+    if (miss.length) notice(box, 'Отчёт по бюджету', noCols(miss));
+    else if (!rd.budgeted.rows.length) notice(box, 'Отчёт по бюджету', noData);
+    else {
+      const b = rd.budgeted;
+      box.innerHTML = '<h3>Отчёт по бюджету</h3><table class="rp list"><thead><tr><th class="t"></th><th>Бюджет</th><th>Сумма за печать</th></tr></thead><tbody>' +
+        `<tr class="mh clk" ${reg('budget', 'Взял в работу: все сделки', 'Бюджет и сумма за печать', b.deals)}><th class="t">Взял в работу</th><td>${fmtR(b.budget)}</td><td>${fmtR(b.print)}</td></tr>` +
+        b.rows.map(x => `<tr class="pl clk" ${reg('budget', x.name, 'Взял в работу', x.deals)}><th class="t">${esc(x.name)}<span class="n">${x.n} зак.</span></th><td>${fmtR(x.budget)}</td><td>${fmtR(x.print)}</td></tr>`).join('') +
+        '</tbody></table>';
+    }
   }
 
-  function renderKpis(items) {
-    let m = 0, a = 0; const deals = new Set(); const by = { 'Мат': 0, 'Глянец': 0, 'Не указано': 0 };
-    items.forEach(i => { m += i.l; a += i.l * i.w; deals.add(i.dealId); by[i.surface] += i.l; });
+  function renderKpis(items, deals) {
+    let m = 0, a = 0; const withCons = new Set(); const by = { 'Мат': 0, 'Глянец': 0, 'Не указано': 0 };
+    items.forEach(i => { m += i.l; a += i.l * i.w; withCons.add(i.dealId); by[i.surface] += i.l; });
     const pct = v => (m ? Math.round(v / m * 100) : 0);
+    // заявок = сделок с номером в выбранных фильтрах; из них расход материала есть не у всех (у части расход 0 м или ещё не внесён)
+    const reqDeals = deals.filter(d => d.req != null);
+    const withMat = reqDeals.filter(d => withCons.has(d.id)).length;
     $('kpis').innerHTML = `
       <div class="kpi"><div class="k">Расход материала</div><div class="v num">${fmt(m, 1)}<small>м</small></div><div class="s num">площадь ${fmt(a, 1)} м²</div></div>
-      <div class="kpi"><div class="k">Заказов</div><div class="v num">${deals.size}</div><div class="s num">позиций расхода: ${items.length}</div></div>
+      <div class="kpi"><div class="k">Заявок</div><div class="v num">${fmt(reqDeals.length, 0)}</div><div class="s num">с расходом материала: ${fmt(withMat, 0)} · без расхода: ${fmt(reqDeals.length - withMat, 0)}</div></div>
       <div class="kpi"><div class="k">Мат / Глянец</div><div class="v num">${pct(by['Мат'])}<small>%</small> / ${pct(by['Глянец'])}<small>%</small></div>
         <div class="splitbar"><i class="m" style="width:${pct(by['Мат'])}%"></i><i class="g" style="width:${pct(by['Глянец'])}%"></i><i class="n" style="width:${m ? 100 - pct(by['Мат']) - pct(by['Глянец']) : 0}%"></i></div>
-        <div class="s num">мат ${fmt(by['Мат'], 1)} м · глянец ${fmt(by['Глянец'], 1)} м${by['Не указано'] ? ` · не указано ${fmt(by['Не указано'], 1)} м` : ''}</div></div>`;
+        <div class="s num">мат ${fmt(by['Мат'], 1)} м · глянец ${fmt(by['Глянец'], 1)} м${by['Не указано'] ? ` · тип не указан ${fmt(by['Не указано'], 1)} м` : ''}</div></div>`;
   }
 
   function sumCells(rows, colKey, kind) {
@@ -1451,7 +1593,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     const rowHtml = r => {
       const cells = p.cols.map((c, ci) => {
         const acc = r.cells.get(c.key), v = acc ? p.value(acc) : 0;
-        return v ? `<td class="v" style="--h:${heat(v)}" data-k="cell" data-ri="${ri.get(r)}" data-ci="${ci}">${fmt(v, dec)}</td>` : `<td class="z"></td>`;
+        return v ? `<td class="v cell" style="--h:${heat(v)}" data-k="cell" data-ri="${ri.get(r)}" data-ci="${ci}">${fmt(v, dec)}</td>` : `<td class="z"></td>`;
       }).join('');
       const indent = p.groups ? ' indent' : '';
       return `<tr><th class="${indent}" title="${esc(r.label)}"><span class="mat">${esc(r.label)}</span>${badgeHtml(r.badge)}</th>${cells}<td class="v tot totcol" data-k="row" data-ri="${ri.get(r)}">${fmt(p.value(r.acc), dec)}</td></tr>`;
@@ -1474,7 +1616,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       <tfoot><tr><th>Итого</th>${foot}<td class="totcol v" data-k="all">${fmt(p.value(p.grand), dec)}</td></tr></tfoot></table>`;
   }
 
-  function renderNotes(p, u, allCount, shownCount) {
+  function renderNotes(p, u) {
     const notes = [];
     const hr = Math.max(0, u.rows - p.rows.length), hc = Math.max(0, u.cols - p.cols.length);
     notes.push(`<div class="note hidden-info"><span>Показано <b>${p.rows.length}</b> из ${u.rows} строк и <b>${p.cols.length}</b> из ${u.cols} столбцов.</span>
@@ -1493,6 +1635,16 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 
   // ---------------------------------------------------------------- детализация по клику
 
+  function showDialog() {
+    const dlg = $('drill');
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  function closeDialog() {
+    const d = $('drill');
+    if (d.close) d.close(); else d.removeAttribute('open');
+  }
+
+  // Таблица расхода материала: клик по числу
   function openDrill(kind, ri, ci) {
     const { p } = state.pv;
     let items, title, sub;
@@ -1501,21 +1653,54 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     else if (kind === 'row') { items = row.acc.items; title = row.label + (row.badge ? ` (${row.badge})` : ''); sub = 'Все столбцы'; }
     else if (kind === 'col') { items = col.acc.items; title = `${DIMS[state.pv.cfg.colDim].label}: ${col.label}`; sub = 'Все строки'; }
     else { items = p.grand.items; title = 'Все позиции отчёта'; sub = subtitle(); }
-    items = items.slice().sort((a, b) => (b[state.ui.dateField] || '').localeCompare(a[state.ui.dateField] || '') || b.l - a.l);
+    items = items.slice().sort((a, b) => (b.req == null ? -1 : b.req) - (a.req == null ? -1 : a.req) || b.l - a.l);
     const total = items.reduce((s, i) => s + i.l, 0);
     $('drillTitle').textContent = title;
-    $('drillSub').textContent = `${sub} · позиций: ${items.length} · заказов: ${new Set(items.map(i => i.dealId)).size} · ${fmt(total, 2)} м`;
-    $('drillBody').innerHTML = `<table><thead><tr><th>Дата</th><th>Заказ</th><th>Материал</th><th>Покрытие</th><th class="r">Ширина, м</th><th class="r">Длина, м</th><th>Печатник</th></tr></thead><tbody>
-      ${items.map(i => `<tr><td class="num">${esc(Core.fmtDay(i[state.ui.dateField]))}</td><td><b>#${esc(i.dealId)}</b> ${esc(i.name)}</td><td>${esc(i.material)}</td><td>${esc(i.surface)}</td><td class="r num">${esc(Core.fmtWidth(i.w))}</td><td class="r num">${fmt(i.l, 2)}</td><td>${esc(i.printer || '—')}</td></tr>`).join('')}
-      </tbody><tfoot><tr><td colspan="5">Итого</td><td class="r num">${fmt(total, 2)}</td><td></td></tr></tfoot></table>`;
-    const dlg = $('drill');
-    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    $('drillSub').textContent = `${sub} · позиций: ${items.length} · заявок: ${new Set(items.map(i => i.dealId)).size} · ${fmt(total, 2)} м`;
+    $('drillBody').innerHTML = `<table><thead><tr><th>Заявка №</th><th>Название сделки</th><th>Сделка (ID)</th><th>Дата</th><th>Материал</th><th>Покрытие</th><th class="r">Ширина, м</th><th class="r">Длина, м</th><th>Печатник</th><th>Взял в работу</th></tr></thead><tbody>
+      ${items.map(i => `<tr><td class="num"><b>${i.req == null ? '—' : i.req}</b></td><td>${esc(i.name || '—')}</td><td class="num">${esc(i.dealId)}</td><td class="num">${esc(Core.fmtDay(i[state.ui.dateField]))}</td><td>${esc(i.material)}</td><td>${esc(i.surface)}</td><td class="r num">${esc(Core.fmtWidth(i.w))}</td><td class="r num">${fmt(i.l, 2)}</td><td>${esc(i.printer || '—')}</td><td>${esc(i.tookBy || '—')}</td></tr>`).join('')}
+      </tbody><tfoot><tr><td colspan="7">Итого</td><td class="r num">${fmt(total, 2)}</td><td colspan="2"></td></tr></tfoot></table>`;
+    showDialog();
+  }
+
+  // Отчёты по печатникам, дизайнерам, бюджету: клик по строке - список сделок
+  const T = {
+    req:    { h: 'Заявка №', v: d => `<b>${d.req == null ? '—' : d.req}</b>`, cls: 'num' },
+    name:   { h: 'Название сделки', v: d => esc(d.name || '—') },
+    id:     { h: 'Сделка (ID)', v: d => esc(d.id), cls: 'num' },
+    mat:    { h: 'Материал', v: d => esc(d.material || '—') },
+    who:    { h: 'Взял в работу', v: d => esc(d.tookBy || '—') },
+    printer: { h: 'Печатник', v: d => esc(d.printer || '—') },
+    machine: { h: 'Станок', v: d => esc(d.machine || '—') },
+    designer: { h: 'Дизайнер', v: d => esc(d.designer || '—') },
+    area:   { h: 'Квадратура, м²', v: d => fmt(d.area, 2), sum: d => d.area, dec: 2, num: true },
+    print:  { h: 'Сумма за печать, ₽', v: d => fmt(d.printSum, 2), sum: d => d.printSum, dec: 2, num: true },
+    design: { h: 'Сумма за дизайн, ₽', v: d => fmt(d.designSum, 2), sum: d => d.designSum, dec: 2, num: true },
+    budget: { h: 'Бюджет (сумма продажи), ₽', v: d => fmt(d.budget, 2), sum: d => d.budget, dec: 2, num: true },
+  };
+  const DEAL_COLS = {
+    printers:  ['req', 'id', 'name', 'machine', 'printer', 'area', 'print'],
+    designers: ['req', 'id', 'name', 'designer', 'design'],
+    budget:    ['req', 'mat', 'name', 'id', 'who', 'budget', 'print'],
+  };
+
+  function openDeals(dr) {
+    if (!dr) return;
+    const cols = DEAL_COLS[dr.kind].map(k => T[k]);
+    const deals = dr.deals.slice().sort((a, b) => (b.req == null ? -1 : b.req) - (a.req == null ? -1 : a.req) || String(b.id).localeCompare(String(a.id)));
+    $('drillTitle').textContent = dr.title;
+    $('drillSub').textContent = `${dr.sub} · сделок: ${fmt(deals.length, 0)}`;
+    const head = cols.map(c => `<th class="${c.num ? 'r' : ''}">${c.h}</th>`).join('');
+    const rows = deals.map(d => `<tr>${cols.map(c => `<td class="${(c.cls || '') + (c.num ? ' r num' : '')}">${c.v(d)}</td>`).join('')}</tr>`).join('');
+    const foot = cols.map((c, i) => c.sum ? `<td class="r num">${fmt(deals.reduce((s, d) => s + c.sum(d), 0), c.dec)}</td>` : `<td>${i === 0 ? 'Итого' : ''}</td>`).join('');
+    $('drillBody').innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody><tfoot><tr>${foot}</tr></tfoot></table>`;
+    showDialog();
   }
 
   // ---------------------------------------------------------------- экспорт
 
   function exportXlsx() {
-    if (!state.pv || !state.pv.p.rows.length) { toast('Нечего выгружать: по фильтрам данных нет.', true); return; }
+    if (!state.pv || (!state.pv.p.rows.length && !state.pv.deals.length)) { toast('Нечего выгружать: по фильтрам данных нет.', true); return; }
     const { p, cfg } = state.pv;
     const mat = cfg.rowDim === 'material';
     const dec = VALUES[cfg.value].dec;
@@ -1537,7 +1722,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       if (cell && typeof cell.v === 'number') cell.z = dec ? '0.00' : '0';
     }
     const wb = XLSX.utils.book_new();
-    const { printed, designed, summed } = state.pv.reports;
+    const { printed, designed, budgeted } = state.pv.reports;
     const rnd = v => Math.round(v * 100) / 100;
     const sheetOf = (rows, widths) => { const w = XLSX.utils.aoa_to_sheet(rows); w['!cols'] = widths.map(x => ({ wch: x })); return w; };
     if (printed.machines.length) {
@@ -1548,21 +1733,21 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
         m.rows.forEach(pr => a.push([`    ${pr.name}`, ...t3(pr)]));
         a.push(['    Итого исполнено', ...t3(m.done)]);
       });
-      if (printed.internal) a.push(['ПРОИЗВОДСТВО (заказы компаний «Производство …», входят в суммы по станкам)', ...t3(printed.internal)]);
+      if (printed.internal) a.push(['ПРОИЗВОДСТВО (компании с подписью «ПРОИЗВОДСТВО …», входят в суммы по станкам)', ...t3(printed.internal)]);
       a.push(['Всего передано на станки', ...t3(printed.total)]);
       XLSX.utils.book_append_sheet(wb, sheetOf(a, [52, 16, 18, 20]), 'Печатники');
     }
     if (designed.rows.length) {
-      const a = [['Отчёт по дизайнерам'], [subtitle()], [], ['Дизайнер', 'Сумма, ₽', 'Заказов'], ['Дизайнеры (всего)', rnd(designed.total), '']];
+      const a = [['Отчёт по дизайнерам'], [subtitle()], [], ['Дизайнер', 'Сумма за дизайн, ₽', 'Заказов'], ['Дизайнеры (всего)', rnd(designed.total), '']];
       designed.rows.forEach(x => a.push([x.name, rnd(x.sum), x.n]));
-      XLSX.utils.book_append_sheet(wb, sheetOf(a, [34, 14, 10]), 'Дизайнеры');
+      XLSX.utils.book_append_sheet(wb, sheetOf(a, [34, 18, 10]), 'Дизайнеры');
     }
-    if (summed.rows.length) {
-      const a = [['Отчёт по суммам'], [subtitle()], [], ['Взял в работу', 'Сумма, ₽', 'Заказов'], ['Всего', rnd(summed.total), summed.n]];
-      summed.rows.forEach(x => a.push([x.name, rnd(x.sum), x.n]));
-      XLSX.utils.book_append_sheet(wb, sheetOf(a, [34, 14, 10]), 'Суммы');
+    if (budgeted.rows.length) {
+      const a = [['Отчёт по бюджету'], [subtitle()], [], ['Взял в работу', 'Бюджет, ₽', 'Сумма за печать, ₽', 'Заказов'], ['Всего', rnd(budgeted.budget), rnd(budgeted.print), budgeted.n]];
+      budgeted.rows.forEach(x => a.push([x.name, rnd(x.budget), rnd(x.print), x.n]));
+      XLSX.utils.book_append_sheet(wb, sheetOf(a, [34, 16, 20, 10]), 'Бюджет');
     }
-    XLSX.utils.book_append_sheet(wb, ws, 'Расход материала');
+    if (p.rows.length) XLSX.utils.book_append_sheet(wb, ws, 'Расход материала');
     XLSX.writeFile(wb, `3R_rashod_${isoLocal(new Date())}.xlsx`);
   }
 
@@ -1620,14 +1805,14 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     const reqInput = (id, key) => on(id, 'input', e => { clearTimeout(rTimer); rTimer = setTimeout(() => { state.f[key] = e.target.value.trim(); draw(); }, 250); });
     reqInput('reqFrom', 'reqFrom'); reqInput('reqTo', 'reqTo');
     on('reqAll', 'click', () => { state.f.reqFrom = state.f.reqTo = ''; $('reqFrom').value = $('reqTo').value = ''; draw(); });
-    on('showZero', 'change', e => { state.ui.showZero = e.target.checked; save(); draw(); });
     on('year', 'change', e => { state.f.year = e.target.value; updateReqHint(); draw(); });
+    on('showZero', 'change', e => { state.ui.showZero = e.target.checked; save(); draw(); });
+    let mTimer;
+    on('maxReq', 'input', e => { clearTimeout(mTimer); mTimer = setTimeout(() => { state.ui.maxReq = e.target.value.replace(/\D/g, ''); save(); updateYears(); updateReqHint(); draw(); }, 300); });
     on('from', 'change', e => { state.f.from = e.target.value; draw(); });
     on('to', 'change', e => { state.f.to = e.target.value; draw(); });
     document.querySelectorAll('#presets .chip').forEach(b => b.addEventListener('click', () => setPreset(b.dataset.p)));
     on('dateField', 'change', e => { state.ui.dateField = e.target.value; save(); syncControls(); draw(); });
-    let qTimer;
-    on('q', 'input', e => { clearTimeout(qTimer); qTimer = setTimeout(() => { state.f.q = e.target.value; draw(); }, 120); });
     on('btnReset', 'click', () => { state.f = emptyFilters(); state.sortCol = null; syncControls(); buildFilters(); draw(); });
 
     const ui = (id, key, isCheck) => on(id, 'change', e => {
@@ -1635,15 +1820,20 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     });
     ui('rowDim', 'rowDim'); ui('colDim', 'colDim'); ui('valueSel', 'value'); ui('split', 'split', true); ui('grp', 'groups', true);
 
-    // клики по таблице: детализация и сортировка
+    // клики по таблице расхода: детализация и сортировка
     on('scroll', 'click', e => {
       const th = e.target.closest('thead th[data-ci]');
       if (th) { const key = state.pv.p.cols[+th.dataset.ci].key; state.sortCol = state.sortCol === key ? null : key; draw(); return; }
       const td = e.target.closest('td[data-k]');
       if (td) openDrill(td.dataset.k, td.dataset.ri != null ? +td.dataset.ri : null, td.dataset.ci != null ? +td.dataset.ci : null);
     });
-    on('drillClose', 'click', () => { const d = $('drill'); if (d.close) d.close(); else d.removeAttribute('open'); });
-    $('drill').addEventListener('click', e => { const d = $('drill'); if (e.target === d) { if (d.close) d.close(); else d.removeAttribute('open'); } });
+    // клики по строкам отчётов по печатникам, дизайнерам, бюджету
+    ['printers', 'designers', 'sums'].forEach(id => on(id, 'click', e => {
+      const tr = e.target.closest('tr[data-dk]');
+      if (tr) openDeals(state.drills[+tr.dataset.dk]);
+    }));
+    on('drillClose', 'click', closeDialog);
+    $('drill').addEventListener('click', e => { if (e.target === $('drill')) closeDialog(); });
 
     on('btnPanel', 'click', () => { state.ui.advOpen = $('panel').hidden; setPanel(!state.ui.advOpen); save(); });
     on('btnXlsx', 'click', exportXlsx);
@@ -1653,11 +1843,11 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       applyTheme(t);
       try { localStorage.setItem('3r-theme', t); } catch (e) { /* без памяти тема просто не запомнится */ }
     });
+    on('btnPrint', 'click', () => window.print());
     // печатаем всегда светлым, независимо от выбранной темы
     let themeBeforePrint = null;
     window.addEventListener('beforeprint', () => { themeBeforePrint = document.documentElement.dataset.theme; document.documentElement.dataset.theme = 'light'; });
     window.addEventListener('afterprint', () => { if (themeBeforePrint) applyTheme(themeBeforePrint); themeBeforePrint = null; });
-    on('btnPrint', 'click', () => window.print());
 
     // закрывать выпадающие списки по клику снаружи
     document.addEventListener('click', e => {
@@ -1668,7 +1858,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     $('bootfail').hidden = true;
     fullRender();
     if (state.dropped) toast(`Формат отчёта обновился: ${state.dropped} прежних выгрузок нужно загрузить заново - в них нет данных для новых отчётов.`, true);
-    window.__app = { state, handleFiles, draw };   // для отладки и автотестов
+    window.__app = { state, handleFiles, draw, activeData };   // для отладки и автотестов
   }
 
   init();
