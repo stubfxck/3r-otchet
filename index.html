@@ -145,7 +145,7 @@ input[type="checkbox"] { accent-color: var(--accent); }
 .reptitle .check { min-height: 0; color: var(--muted); font-size: 13px; }
 
 #reqWarn { margin-top: 10px; }
-.reports { margin-top: 26px; display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(280px, 1fr); gap: 20px 48px; align-items: start; }
+.reports { margin-top: 26px; display: grid; grid-template-columns: minmax(790px, 2fr) minmax(290px, 1fr); gap: 20px 32px; align-items: start; }
 .side { display: grid; gap: 34px; }
 .card { padding: 0 4px; overflow-x: auto; }
 .card h3 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
@@ -154,7 +154,7 @@ input[type="checkbox"] { accent-color: var(--accent); }
 table.rp { width: 100%; border-collapse: collapse; }
 .rp tr.clk { cursor: pointer; }
 .rp tr.clk:hover th, .rp tr.clk:hover td { background: var(--accent-soft); }
-.rp th, .rp td { padding: 5px 12px; white-space: nowrap; font-variant-numeric: tabular-nums; text-align: right; font-weight: 400; }
+.rp th, .rp td { padding: 5px 8px; white-space: nowrap; font-variant-numeric: tabular-nums; text-align: right; font-weight: 400; }
 .rp th.g { text-align: right; color: var(--muted); font-size: 13px; padding-right: 6px; width: 1%; }
 .rp th.t { text-align: left; }
 .rp thead th { padding-top: 0; padding-bottom: 8px; font-size: 14px; }
@@ -171,9 +171,11 @@ table.rp { width: 100%; border-collapse: collapse; }
 .rp tr.done th.t, .rp tr.done td { font-size: 11.5px; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: .3px; padding-top: 8px; }
 .rp tr.internal th.t, .rp tr.internal td { padding-top: 30px; padding-bottom: 6px; border-bottom: 2px solid var(--accent); font-weight: 700; font-size: 19px; }
 .rp tr.internal td.dim { font-size: 14px; font-weight: 400; }
-.rp tr.internal th small { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); white-space: normal; max-width: 300px; }
+.rp tr.internal th small { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); white-space: normal; max-width: 210px; }
 .rp tr.gt th.t, .rp tr.gt td { padding-top: 10px; font-weight: 700; font-size: 18px; color: var(--faint); }
 .rp tr.gt td.dim { font-size: 14px; }
+.rp tr.gt th.t, .rp tr.internal th.t { white-space: normal; }
+.rp tr.gt th.t { font-size: 16px; }
 
 /* дизайнеры и суммы: заголовок с красной линией, ниже список */
 table.rp.list th, table.rp.list td { padding: 5px 8px; }
@@ -181,9 +183,11 @@ table.rp.list th.t { font-size: 15px; }
 table.rp.list tr.mh th.t, table.rp.list tr.mh td { padding-top: 10px; font-size: 18px; font-weight: 700; }
 table.rp.list td { font-size: 15px; }
 table.rp.list td .n, table.rp.list th .n { color: var(--muted); font-size: 12px; margin-left: 8px; font-weight: 400; }
-@media (max-width: 980px) { .reports { grid-template-columns: minmax(0, 1fr); } .reptitle .rngnum { font-size: 32px; } }
+@media (max-width: 1160px) { .reports { grid-template-columns: minmax(0, 1fr); } .reptitle .rngnum { font-size: 32px; } }
 
 /* ---------- KPI ---------- */
+.lnk { color: var(--accent); cursor: pointer; text-decoration: underline dotted; text-underline-offset: 2px; }
+.lnk:hover { text-decoration: underline; }
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 34px 0 14px; }
 .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; box-shadow: var(--shadow); }
 .kpi .k { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); font-weight: 600; }
@@ -1147,6 +1151,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   const fmtA = v => fmt(v, 1);            // квадратура
   const fmtM = v => fmt(v, 1);            // деньги в отчёте по печатникам, как в исходной таблице: 105 728,0
   const fmtR = v => fmt(Math.round(v), 0);
+  const plural = (n, w) => { const m = n % 100, d = n % 10; return m > 10 && m < 15 ? w[2] : d === 1 ? w[0] : d >= 2 && d <= 4 ? w[1] : w[2]; };
 
   let toastTimer;
   function toast(msg, isErr, sticky) {
@@ -1364,7 +1369,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     if (by.low.length) parts.push(`Ниже основного диапазона (от ${rg.min != null ? rg.min : ''}): ${list(by.low, e => e.req)}`);
     if (by.text.length) parts.push(`В поле «Номер заявки» не число: ${list(by.text, e => '«' + e.raw + '»')}`);
     const mode = rg.mode === 'manual' ? 'максимум задан вручную' : rg.mode === 'auto' ? 'границы определены автоматически' : '';
-    box.innerHTML = `<details class="warns"><summary>Исключено из отчётов: ${fmt(ex.length, 0)} сделок с некорректным номером заявки${rg.max != null ? ` (допустимый максимум ${rg.max}${mode ? ', ' + mode : ''})` : ''}</summary><ul>` +
+    box.innerHTML = `<details class="warns"><summary>Исключено из отчётов: ${fmt(ex.length, 0)} ${plural(ex.length, ['сделка', 'сделки', 'сделок'])} с некорректным номером заявки${rg.max != null ? ` (допустимый максимум ${rg.max}${mode ? ', ' + mode : ''})` : ''}</summary><ul>` +
       parts.map(p => `<li>${esc(p)}</li>`).join('') +
       `<li>Сделки (ID): <span class="ids">${esc(ex.slice(0, 40).map(e => e.id).join(', '))}${ex.length > 40 ? ` … и ещё ${ex.length - 40}` : ''}</span></li>` +
       `<li>Если границы определены неверно, задайте «Макс. номер заявки» вручную: «Дополнительно».</li></ul></details>`;
@@ -1551,9 +1556,16 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     // заявок = сделок с номером в выбранных фильтрах; из них расход материала есть не у всех (у части расход 0 м или ещё не внесён)
     const reqDeals = deals.filter(d => d.req != null);
     const withMat = reqDeals.filter(d => withCons.has(d.id)).length;
+    const noCons = reqDeals.filter(d => !withCons.has(d.id));
+    state.pv.noCons = noCons;
+    const reqNums = reqDeals.map(d => d.req);
+    const distinctReq = new Set(reqNums).size;   // одна заявка может встречаться у двух сделок
+    let rMin = Infinity, rMax = -Infinity;
+    reqNums.forEach(n => { if (n < rMin) rMin = n; if (n > rMax) rMax = n; });
+    const span = reqNums.length ? rMax - rMin + 1 : 0;   // сколько номеров в диапазоне: 12034 - 8100 + 1 = 3935
     $('kpis').innerHTML = `
       <div class="kpi"><div class="k">Расход материала</div><div class="v num">${fmt(m, 1)}<small>м</small></div><div class="s num">площадь ${fmt(a, 1)} м²</div></div>
-      <div class="kpi"><div class="k">Заявок</div><div class="v num">${fmt(reqDeals.length, 0)}</div><div class="s num">с расходом материала: ${fmt(withMat, 0)} · без расхода: ${fmt(reqDeals.length - withMat, 0)}</div></div>
+      <div class="kpi"><div class="k">Заявок</div><div class="v num">${fmt(reqDeals.length, 0)}</div><div class="s num">с расходом материала: ${fmt(withMat, 0)} · <a class="lnk" data-act="noCons" title="Показать список заявок без расхода">без расхода: ${fmt(noCons.length, 0)}</a></div>${reqNums.length ? `<div class="s num">№ ${rMin} – ${rMax}: ${fmt(span, 0)} номеров · пропусков: ${fmt(Math.max(0, span - distinctReq), 0)} · повторов: ${fmt(reqDeals.length - distinctReq, 0)}</div>` : ''}</div>
       <div class="kpi"><div class="k">Мат / Глянец</div><div class="v num">${pct(by['Мат'])}<small>%</small> / ${pct(by['Глянец'])}<small>%</small></div>
         <div class="splitbar"><i class="m" style="width:${pct(by['Мат'])}%"></i><i class="g" style="width:${pct(by['Глянец'])}%"></i><i class="n" style="width:${m ? 100 - pct(by['Мат']) - pct(by['Глянец']) : 0}%"></i></div>
         <div class="s num">мат ${fmt(by['Мат'], 1)} м · глянец ${fmt(by['Глянец'], 1)} м${by['Не указано'] ? ` · тип не указан ${fmt(by['Не указано'], 1)} м` : ''}</div></div>`;
@@ -1621,6 +1633,10 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     const hr = Math.max(0, u.rows - p.rows.length), hc = Math.max(0, u.cols - p.cols.length);
     notes.push(`<div class="note hidden-info"><span>Показано <b>${p.rows.length}</b> из ${u.rows} строк и <b>${p.cols.length}</b> из ${u.cols} столбцов.</span>
       <span>Скрыто без значений: <b>${hr}</b> строк, <b>${hc}</b> столбцов - строки и столбцы, где везде 0, в отчёт не попадают.</span></div>`);
+    const dupMap = new Map();
+    state.pv.deals.forEach(d => { if (d.req != null) dupMap.set(d.req, (dupMap.get(d.req) || 0) + 1); });
+    const dups = [...dupMap.entries()].filter(([, n]) => n > 1).sort((a, b) => a[0] - b[0]);
+    if (dups.length) notes.push(`<div class="note">Номера заявок, которые встречаются у нескольких сделок: <b>${dups.length}</b> (${esc(dups.slice(0, 12).map(([r, n]) => `${r} ×${n}`).join(', '))}${dups.length > 12 ? ` … и ещё ${dups.length - 12}` : ''}). Поэтому заявок бывает больше, чем номеров в диапазоне.</div>`);
     const items = [];
     activeSnaps().forEach(s => (s.warnings || []).forEach(w => items.push({ s, w })));
     if (items.length) {
@@ -1672,6 +1688,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     who:    { h: 'Взял в работу', v: d => esc(d.tookBy || '—') },
     printer: { h: 'Печатник', v: d => esc(d.printer || '—') },
     machine: { h: 'Станок', v: d => esc(d.machine || '—') },
+    stage:  { h: 'Этап', v: d => esc(d.stage || '—') },
     designer: { h: 'Дизайнер', v: d => esc(d.designer || '—') },
     area:   { h: 'Квадратура, м²', v: d => fmt(d.area, 2), sum: d => d.area, dec: 2, num: true },
     print:  { h: 'Сумма за печать, ₽', v: d => fmt(d.printSum, 2), sum: d => d.printSum, dec: 2, num: true },
@@ -1682,6 +1699,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     printers:  ['req', 'id', 'name', 'machine', 'printer', 'area', 'print'],
     designers: ['req', 'id', 'name', 'designer', 'design'],
     budget:    ['req', 'mat', 'name', 'id', 'who', 'budget', 'print'],
+    nocons:    ['req', 'id', 'name', 'stage', 'mat', 'printer', 'who'],
   };
 
   function openDeals(dr) {
@@ -1832,6 +1850,10 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       const tr = e.target.closest('tr[data-dk]');
       if (tr) openDeals(state.drills[+tr.dataset.dk]);
     }));
+    on('kpis', 'click', e => {
+      if (!e.target.closest('[data-act="noCons"]')) return;
+      openDeals({ kind: 'nocons', title: 'Заявки без расхода материала', sub: 'Расход равен 0 м, не внесён печатником или заказ ещё в работе', deals: (state.pv && state.pv.noCons) || [] });
+    });
     on('drillClose', 'click', closeDialog);
     $('drill').addEventListener('click', e => { if (e.target === $('drill')) closeDialog(); });
 
