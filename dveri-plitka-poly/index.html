@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Панель показателей — Двери · Плитка · Полы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1c1a17; --surface:#242019; --surface-2:#2c2820; --border:#3c362c;
+  --accent:#c17f3e; --accent-soft:#a86a2f; --accent2:#6f8f7c;
+  --text:#efe9e0; --text-muted:#a89e92; --good:#8aab6b; --bad:#c1614a;
+  --radius:10px; --serif:"PT Serif",Georgia,serif; --sans:"Inter",system-ui,sans-serif;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  box-sizing:border-box;
+}
+*{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 80px}
+header.top{position:sticky;top:0;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(28,26,23,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border)}
+.top-inner{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.brand{font-family:var(--serif);font-size:20px}
+.brand span{color:var(--accent)}
+.filters{display:flex;gap:10px;flex-wrap:wrap}
+.pillgroup{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px}
+.pill{border:none;background:transparent;color:var(--text-muted);font-family:var(--sans);font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
+.pill.active{background:var(--accent);color:#1c1a17}
+.pill:hover:not(.active){color:var(--text)}
+
+.hero{padding:44px 0 28px;display:flex;flex-wrap:wrap;gap:36px;align-items:flex-end;border-bottom:1px solid var(--border)}
+.hero-num{font-family:var(--serif);font-size:clamp(40px,7vw,64px);line-height:1}
+.hero-label{color:var(--text-muted);font-size:14px;margin-top:6px}
+.hero-chips{display:flex;gap:22px;flex-wrap:wrap;margin-left:auto}
+.chip{min-width:120px}
+.chip b{display:block;font-size:22px;font-family:var(--serif)}
+.chip span{color:var(--text-muted);font-size:12.5px}
+
+section{padding:34px 0;border-bottom:1px solid var(--border)}
+section:last-child{border-bottom:none}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.sec-head h2{font-size:19px}
+.sec-note{color:var(--text-muted);font-size:12.5px}
+
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}.hero-chips{margin-left:0}}
+
+.trend-svg{width:100%;height:150px;display:block}
+.bars{display:flex;align-items:flex-end;gap:18px;height:150px;padding-top:10px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+.bar{width:100%;max-width:52px;border-radius:6px 6px 0 0;background:var(--accent2)}
+.bar.sel{background:var(--accent)}
+.bar-val{font-size:12px;color:var(--text-muted)}
+.bar-name{font-size:12px;color:var(--text-muted);text-align:center}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;color:var(--text-muted);font-weight:500;font-size:12px;padding:0 12px 10px;border-bottom:1px solid var(--border)}
+td{padding:11px 12px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:11px;color:var(--text-muted);border:1px solid var(--border);border-radius:5px;padding:1px 7px}
+.roi-pos{color:var(--good)}.roi-neg{color:var(--bad)}
+
+footer{color:var(--text-muted);font-size:12px;padding:24px 0 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="top-inner">
+  <div class="brand">Витрина <span>·</span> двери, плитка, полы</div>
+  <div class="filters">
+    <div class="pillgroup" id="storeFilter"></div>
+    <div class="pillgroup" id="periodFilter"></div>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <div class="hero-num" id="heroRevenue">—</div>
+      <div class="hero-label">Оборот за период</div>
+    </div>
+    <div class="hero-chips">
+      <div class="chip"><b id="kAvg">—</b><span>Средний чек</span></div>
+      <div class="chip"><b id="kMargin">—</b><span>Прибыль (маржа)</span></div>
+      <div class="chip"><b id="kDeals">—</b><span>Закрытых сделок</span></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="grid2">
+      <div class="card">
+        <div class="sec-head"><h2>Динамика оборота</h2><span class="sec-note">последние 6 месяцев</span></div>
+        <svg class="trend-svg" id="trendSvg" viewBox="0 0 560 150" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="card">
+        <div class="sec-head"><h2>Оборот по магазинам</h2></div>
+        <div class="bars" id="storeBars"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Топ товаров</h2><span class="sec-note">по выручке за период</span></div>
+    <table><thead><tr><th>Товар</th><th>Категория</th><th class="num">Продано</th><th class="num">Выручка</th></tr></thead>
+      <tbody id="productsBody"></tbody></table>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Источники обращений</h2><span class="sec-note">лиды, конверсия, ROI</span></div>
+    <table><thead><tr><th>Канал</th><th class="num">Лиды</th><th class="num">Сделки</th><th class="num">Конверсия</th><th class="num">Выручка</th><th class="num">ROI</th></tr></thead>
+      <tbody id="channelsBody"></tbody></table>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Эффективность менеджеров</h2></div>
+    <table><thead><tr><th>Менеджер</th><th>Магазин</th><th class="num">Сделок</th><th class="num">Конверсия</th><th class="num">Ср. чек</th><th class="num">Оборот</th></tr></thead>
+      <tbody id="managersBody"></tbody></table>
+  </section>
+
+  <footer>
+    <span>Пример оформления · данные условные</span>
+    <span>Обновлено 26.09.2026, 09:14 · источник: amoCRM + МойСклад</span>
+  </footer>
+</div>
+
+<script>
+const fmt = n => Math.round(n).toLocaleString('ru-RU');
+const rub = n => fmt(n) + ' ₽';
+
+const STORES=[{id:'all',name:'Все магазины'},{id:'s1',name:'№1 · Грозный, центр'},{id:'s2',name:'№2 · Грозный, юг'},{id:'s3',name:'№3 · Гудермес'}];
+const PERIODS=[{id:'m',name:'Месяц',mult:1},{id:'q',name:'Квартал',mult:3},{id:'y',name:'Год',mult:12}];
+const SP={s1:{rev:2200000,avg:58000,margin:.27},s2:{rev:1500000,avg:47000,margin:.24},s3:{rev:1250000,avg:41000,margin:.22}};
+
+const PRODUCTS=[
+ {name:'Межкомнатные двери «Модерн»',cat:'Двери',share:.14,price:24500,unit:'шт'},
+ {name:'Входные двери «Форт»',cat:'Двери',share:.11,price:38900,unit:'шт'},
+ {name:'Керамогранит «Каррара» 60×60',cat:'Плитка',share:.13,price:1450,unit:'м²'},
+ {name:'Плитка настенная «Лофт»',cat:'Плитка',share:.09,price:890,unit:'м²'},
+ {name:'Ламинат «Дуб натур» 33кл',cat:'Полы',share:.12,price:1290,unit:'м²'},
+ {name:'SPC-плитка «Стоун»',cat:'Полы',share:.08,price:1690,unit:'м²'},
+];
+const CHANNELS=[
+ {name:'Instagram',leadShare:.34,conv:.24,cpl:340},
+ {name:'WhatsApp',leadShare:.27,conv:.35,cpl:260},
+ {name:'Avito',leadShare:.24,conv:.19,cpl:410},
+ {name:'Блогеры',leadShare:.15,conv:.22,cpl:520},
+];
+const MANAGERS=[
+ {name:'Ахмед Д.',store:'s1',share:.58,conv:.31},{name:'Зара М.',store:'s1',share:.42,conv:.29},
+ {name:'Иса Б.',store:'s2',share:.52,conv:.27},{name:'Хава С.',store:'s2',share:.48,conv:.33},
+ {name:'Магомед Т.',store:'s3',share:.55,conv:.25},{name:'Лейла А.',store:'s3',share:.45,conv:.30},
+];
+const STORENAME={s1:'№1',s2:'№2',s3:'№3'};
+
+let state={store:'all',period:'m'};
+
+function storeRevenue(id,mult){return SP[id].rev*mult}
+function periodMult(){return PERIODS.find(p=>p.id===state.period).mult}
+
+function agg(){
+  const mult=periodMult();
+  const ids = state.store==='all' ? ['s1','s2','s3'] : [state.store];
+  let revenue=0, marginRev=0, weightedAvg=0;
+  ids.forEach(id=>{const r=storeRevenue(id,mult); revenue+=r; marginRev+=r*SP[id].margin;});
+  const avg = state.store==='all'
+    ? revenue/ids.reduce((s,id)=>s+storeRevenue(id,mult)/SP[id].avg,0)
+    : SP[state.store].avg;
+  const deals = revenue/avg;
+  const margin = marginRev/revenue;
+  return {revenue,avg,margin,deals};
+}
+
+function render(){
+  const {revenue,avg,margin,deals}=agg();
+  document.getElementById('heroRevenue').textContent=rub(revenue);
+  document.getElementById('kAvg').textContent=rub(avg);
+  document.getElementById('kMargin').textContent=(margin*100).toFixed(0)+'% · '+rub(revenue*margin);
+  document.getElementById('kDeals').textContent=fmt(deals);
+
+  // trend
+  const ids = state.store==='all' ? ['s1','s2','s3'] : [state.store];
+  const shape=[.82,.90,.95,1.05,1.10,1.0];
+  const pts=shape.map(m=>ids.reduce((s,id)=>s+SP[id].rev*m,0));
+  const max=Math.max(...pts), min=Math.min(...pts)*.9;
+  const W=560,H=150,step=W/(pts.length-1);
+  const coords=pts.map((v,i)=>[i*step, H-10-((v-min)/(max-min))*(H-24)]);
+  const line=coords.map(c=>c.join(',')).join(' ');
+  const area=`0,${H} ${line} ${W},${H}`;
+  document.getElementById('trendSvg').innerHTML=
+    `<polygon points="${area}" fill="var(--accent)" opacity=".12"/>
+     <polyline points="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+     ${coords.map(c=>`<circle cx="${c[0]}" cy="${c[1]}" r="3.5" fill="var(--accent)"/>`).join('')}`;
+
+  // store bars
+  const mult=periodMult();
+  const maxRev=Math.max(...Object.keys(SP).map(id=>storeRevenue(id,mult)));
+  document.getElementById('storeBars').innerHTML=Object.keys(SP).map(id=>{
+    const r=storeRevenue(id,mult);
+    const h=Math.max(8,(r/maxRev)*120);
+    const sel = state.store===id ? 'sel':'';
+    return `<div class="bar-col"><div class="bar-val">${fmt(r/1000)}к</div><div class="bar ${sel}" style="height:${h}px"></div><div class="bar-name">${STORENAME[id]}</div></div>`;
+  }).join('');
+
+  const leadsTotal = deals/0.28;
+
+  // products
+  document.getElementById('productsBody').innerHTML=PRODUCTS.map(p=>{
+    const rev=revenue*p.share, qty=rev/p.price;
+    return `<tr><td>${p.name}</td><td><span class="tag">${p.cat}</span></td><td class="num">${fmt(qty)} ${p.unit}</td><td class="num">${rub(rev)}</td></tr>`;
+  }).join('');
+
+  // channels
+  document.getElementById('channelsBody').innerHTML=CHANNELS.map(c=>{
+    const leads=leadsTotal*c.leadShare, dl=leads*c.conv, rev=dl*avg, spend=leads*c.cpl;
+    const roi = c.cpl>0 ? ((rev-spend)/spend*100) : null;
+    const roiTxt = roi===null ? 'органика' : (roi>=0?'+':'')+roi.toFixed(0)+'%';
+    const roiCls = roi===null ? '' : (roi>=0?'roi-pos':'roi-neg');
+    return `<tr><td>${c.name}</td><td class="num">${fmt(leads)}</td><td class="num">${fmt(dl)}</td><td class="num">${(c.conv*100).toFixed(0)}%</td><td class="num">${rub(rev)}</td><td class="num ${roiCls}">${roiTxt}</td></tr>`;
+  }).join('');
+
+  // managers
+  const visMgrs = state.store==='all' ? MANAGERS : MANAGERS.filter(m=>m.store===state.store);
+  document.getElementById('managersBody').innerHTML=visMgrs.map(m=>{
+    const storeDeals = storeRevenue(m.store,mult)/SP[m.store].avg;
+    const mDeals = storeDeals*m.share;
+    const mRev = mDeals*SP[m.store].avg;
+    return `<tr><td>${m.name}</td><td>${STORENAME[m.store]}</td><td class="num">${fmt(mDeals)}</td><td class="num">${(m.conv*100).toFixed(0)}%</td><td class="num">${rub(SP[m.store].avg)}</td><td class="num">${rub(mRev)}</td></tr>`;
+  }).join('');
+}
+
+function buildFilters(){
+  const sf=document.getElementById('storeFilter');
+  sf.innerHTML=STORES.map(s=>`<button class="pill ${s.id===state.store?'active':''}" data-store="${s.id}">${s.name}</button>`).join('');
+  const pf=document.getElementById('periodFilter');
+  pf.innerHTML=PERIODS.map(p=>`<button class="pill ${p.id===state.period?'active':''}" data-period="${p.id}">${p.name}</button>`).join('');
+  sf.querySelectorAll('.pill').forEach(b=>b.onclick=()=>{state.store=b.dataset.store;buildFilters();render();});
+  pf.querySelectorAll('.pill').forEach(b=>b.onclick=()=>{state.period=b.dataset.period;buildFilters();render();});
+}
+
+buildFilters();
+render();
+</script>
+</body>
+</html>
