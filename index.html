@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>3R - отчёт по заявкам</title>
+<title>Три-R — отчёт по заявкам</title>
 <script>
 // тема выбирается до отрисовки, чтобы не мигало; по умолчанию светлая
 try { document.documentElement.dataset.theme = localStorage.getItem('3r-theme') === 'dark' ? 'dark' : 'light'; } catch (e) {}
@@ -350,7 +350,7 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
 </div>
 
 <header class="top">
-  <div class="brand">3R <small>отчёт по заявкам</small></div>
+  <div class="brand">Три-R <small>отчёт по заявкам</small></div>
   <div class="grow"></div>
   <div class="snap" id="snapBox" hidden>
     <label for="snapSel" style="color:var(--muted);font-size:12px">Выгрузка</label>
@@ -527,7 +527,7 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 10px
 </dialog>
 
 <div class="toast" id="toast" hidden></div>
-<footer>Данные остаются в этом браузере. Собрано для 3R.</footer>
+<footer>Данные остаются в этом браузере. Собрано для Три-R.</footer>
 
 <script>
 /*! xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
@@ -2205,7 +2205,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       XLSX.utils.book_append_sheet(wb, sheetOf(a, [26, ...ch.series.map(() => 16)]), 'Динамика');
     }
     if (p.rows.length) XLSX.utils.book_append_sheet(wb, ws, 'Расход материала');
-    XLSX.writeFile(wb, `3R_rashod_${isoLocal(new Date())}.xlsx`);
+    XLSX.writeFile(wb, `Три-R_расход_${isoLocal(new Date())}.xlsx`);
   }
 
   // ---------------------------------------------------------------- события
